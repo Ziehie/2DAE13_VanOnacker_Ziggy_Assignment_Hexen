@@ -18,12 +18,12 @@ namespace BoardSystem
         {
             mesh = new Mesh();
 
-            List<Vector3> verts = new List<Vector3>();
+            List<Vector3> vertices = new List<Vector3>();
             List<int> tris = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
 
             for (int i = 0; i < 6; i++)
-                verts.Add(GetCorner(Vector3.zero, radius, i));
+                vertices.Add(GetCorner(Vector3.zero, radius, i));
 
             tris.Add(0);
             tris.Add(2);
@@ -49,7 +49,7 @@ namespace BoardSystem
             uvs.Add(new Vector2(0, 0.25f));
             uvs.Add(new Vector2(0, 0.75f));
 
-            mesh.vertices = verts.ToArray();
+            mesh.vertices = vertices.ToArray();
             mesh.triangles = tris.ToArray();
             mesh.uv = uvs.ToArray();
 
@@ -58,104 +58,22 @@ namespace BoardSystem
             mesh.RecalculateNormals();
         }
 
-        #region Coordinate Conversion Functions
-
-        public static OffsetIndex CubeToEvenFlat(CubeIndex c)
+        public static Tile operator+(Tile one, Tile two)
         {
-            OffsetIndex o;
-            o.row = c.x;
-            o.col = c.z + (c.x + (c.x & 1)) / 2;
-            return o;
+            return new Tile { index = one.index + two.index };
         }
 
-        public static CubeIndex EvenFlatToCube(OffsetIndex o)
-        {
-            CubeIndex c;
-            c.x = o.col;
-            c.z = o.row - (o.col + (o.col & 1)) / 2;
-            c.y = -c.x - c.z;
-            return c;
-        }
-
-        public static OffsetIndex CubeToOddFlat(CubeIndex c)
-        {
-            OffsetIndex o;
-            o.col = c.x;
-            o.row = c.z + (c.x - (c.x & 1)) / 2;
-            return o;
-        }
-
-        public static CubeIndex OddFlatToCube(OffsetIndex o)
-        {
-            CubeIndex c;
-            c.x = o.col;
-            c.z = o.row - (o.col - (o.col & 1)) / 2;
-            c.y = -c.x - c.z;
-            return c;
-        }
-
-        public static OffsetIndex CubeToEvenPointy(CubeIndex c)
-        {
-            OffsetIndex o;
-            o.row = c.z;
-            o.col = c.x + (c.z + (c.z & 1)) / 2;
-            return o;
-        }
-
-        public static CubeIndex EvenPointyToCube(OffsetIndex o)
-        {
-            CubeIndex c;
-            c.x = o.col - (o.row + (o.row & 1)) / 2;
-            c.z = o.row;
-            c.y = -c.x - c.z;
-            return c;
-        }
-
-        public static OffsetIndex CubeToOddPointy(CubeIndex c)
-        {
-            OffsetIndex o;
-            o.row = c.z;
-            o.col = c.x + (c.z - (c.z & 1)) / 2;
-            return o;
-        }
-
-        public static CubeIndex OddPointyToCube(OffsetIndex o)
-        {
-            CubeIndex c;
-            c.x = o.col - (o.row - (o.row & 1)) / 2;
-            c.z = o.row;
-            c.y = -c.x - c.z;
-            return c;
-        }
-
-        public static Tile operator +(Tile one, Tile two)
-        {
-            Tile ret = new Tile();
-            ret.index = one.index + two.index;
-            return ret;
-        }
-
-        public void LineColour(Color colour)
+        public void SetLineColor(Color color)
         {
             LineRenderer lines = GetComponent<LineRenderer>();
             if (lines)
             {
-                lines.startColor = colour;
-                lines.endColor = colour;
+                lines.startColor = color;
+                lines.endColor = color;
             }
         }
 
-        public void LineColour(Color start, Color end)
-        {
-            LineRenderer lines = GetComponent<LineRenderer>();
-            if (lines)
-            {
-                lines.startColor = start;
-                lines.endColor = end;
-            }
-        }
-
-        public void LineWidth(float width)
+        public void SetLineWidth(float width)
         {
             LineRenderer lines = GetComponent<LineRenderer>();
             if (lines)
@@ -164,18 +82,6 @@ namespace BoardSystem
                 lines.endWidth = width;
             }
         }
-
-        public void LineWidth(float start, float end)
-        {
-            LineRenderer lines = GetComponent<LineRenderer>();
-            if (lines)
-            {
-                lines.startWidth = start;
-                lines.endWidth = end;
-            }
-        }
-
-        #endregion
 
         public int MoveCost { get; set; }
         public int GCost { get; set; }
@@ -222,9 +128,9 @@ namespace BoardSystem
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            CubeIndex o = (CubeIndex)obj;
+            CubeIndex cubeIdx = (CubeIndex)obj;
 
-            return ((x == o.x) && (y == o.y) && (z == o.z));
+            return ((x == cubeIdx.x) && (y == cubeIdx.y) && (z == cubeIdx.z));
         }
 
         public override int GetHashCode()

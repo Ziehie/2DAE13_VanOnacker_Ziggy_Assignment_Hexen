@@ -10,19 +10,18 @@ namespace BoardSystem
         public static Board instance;
 
         //Map settings
-        public int mapWidth;
-        public int mapHeight;
+        [SerializeField] private int _mapWidth = 3;
+        [SerializeField] private int _mapHeight = 2;
 
         //Hex Settings
-        public float hexRadius = 1;
-        public Material hexMaterial;
+        [SerializeField] private float _hexRadius = 1;
+        [SerializeField] private Material _hexMaterial= null;
 
         //Generation Options
-        public bool addColliders = true;
-        public bool drawOutlines = true;
-        public Material lineMaterial;
+        [SerializeField] private bool _enableColliders = true;
+        [SerializeField] private bool _enableOutlines = true;
+        [SerializeField] private Material _lineMaterial = null;
 
-        //Internal variables
         private Dictionary<string, Tile> _board = new Dictionary<string, Tile>();
         private Mesh _hexMesh = null;
 
@@ -37,14 +36,7 @@ namespace BoardSystem
                 new CubeIndex(0, -1, 1)
             };
 
-        #region Getters and Setters
-
-        public Dictionary<string, Tile> Tiles
-        {
-            get { return _board; }
-        }
-
-        #endregion
+        public Dictionary<string, Tile> Tiles => _board;
 
         #region Public Methods
 
@@ -87,11 +79,9 @@ namespace BoardSystem
 
             if (tile == null) return tiles;
 
-            CubeIndex cubeIdx;
-
             for (int i = 0; i < 6; i++)
             {
-                cubeIdx = tile.index + _directions[i];
+                var cubeIdx = tile.index + _directions[i];
                 if (_board.ContainsKey(cubeIdx.ToString()))
                 {
                     tiles.Add(_board[cubeIdx.ToString()]);
@@ -127,7 +117,9 @@ namespace BoardSystem
                 {
                     cubeIdx = new CubeIndex(dx, dy, -dx - dy) + center.index;
                     if (_board.ContainsKey(cubeIdx.ToString()))
+                    {
                         tiles.Add(_board[cubeIdx.ToString()]);
+                    }
                 }
             }
             return tiles;
@@ -171,17 +163,15 @@ namespace BoardSystem
         private void GetMesh()
         {
             _hexMesh = null;
-            Tile.GetHexMesh(hexRadius, ref _hexMesh);
+            Tile.GetHexMesh(_hexRadius, ref _hexMesh);
         }
 
         private void GenerateHexShapedBoard()
         {
             Debug.Log("Generating board...");
 
-            Tile tile;
             Vector3 pos = Vector3.zero;
-
-            int mapSize = Mathf.Max(mapWidth, mapHeight);
+            int mapSize = Mathf.Max(_mapWidth, _mapHeight);
 
             for (int q = -mapSize; q <= mapSize; q++)
             {
@@ -189,10 +179,10 @@ namespace BoardSystem
                 int r2 = Mathf.Min(mapSize, -q + mapSize);
                 for (int r = r1; r <= r2; r++)
                 {
-                    pos.x = hexRadius * 3.0f / 2.0f * q;
-                    pos.z = hexRadius * Mathf.Sqrt(3.0f) * (r + q / 2.0f);
+                    pos.x = _hexRadius * 3.0f / 2.0f * q;
+                    pos.z = _hexRadius * Mathf.Sqrt(3.0f) * (r + q / 2.0f);
 
-                    tile = CreateHexTile(pos, ("Hex[" + q + "," + r + "," + (-q - r).ToString() + "]"));
+                    var tile = CreateHexTile(pos, ("Hex[" + q + "," + r + "," + (-q - r).ToString() + "]"));
                     tile.index = new CubeIndex(q, r, -q - r);
                     _board.Add(tile.index.ToString(), tile);
                 }
@@ -201,36 +191,36 @@ namespace BoardSystem
 
         private Tile CreateHexTile(Vector3 postion, string name)
         {
-            GameObject go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(Tile));
+            GameObject hexObject = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(Tile));
 
-            if (addColliders)
-                go.AddComponent<MeshCollider>();
+            if (_enableColliders)
+                hexObject.AddComponent<MeshCollider>();
 
-            if (drawOutlines)
-                go.AddComponent<LineRenderer>();
+            if (_enableOutlines)
+                hexObject.AddComponent<LineRenderer>();
 
-            go.transform.position = postion;
-            go.transform.parent = this.transform;
+            hexObject.transform.position = postion;
+            hexObject.transform.parent = this.transform;
 
-            Tile tile = go.GetComponent<Tile>();
-            MeshFilter fil = go.GetComponent<MeshFilter>();
-            MeshRenderer ren = go.GetComponent<MeshRenderer>();
+            Tile tile = hexObject.GetComponent<Tile>();
+            MeshFilter meshFilter = hexObject.GetComponent<MeshFilter>();
+            MeshRenderer meshRenderer = hexObject.GetComponent<MeshRenderer>();
 
-            fil.sharedMesh = _hexMesh;
+            meshFilter.sharedMesh = _hexMesh;
 
-            ren.material = (hexMaterial)
-                ? hexMaterial
+            meshRenderer.material = (_hexMaterial)
+                ? _hexMaterial
                 : UnityEditor.AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
 
-            if (addColliders)
+            if (_enableColliders)
             {
-                MeshCollider col = go.GetComponent<MeshCollider>();
+                MeshCollider col = hexObject.GetComponent<MeshCollider>();
                 col.sharedMesh = _hexMesh;
             }
 
-            if (drawOutlines)
+            if (_enableOutlines)
             {
-                LineRenderer lines = go.GetComponent<LineRenderer>();
+                LineRenderer lines = hexObject.GetComponent<LineRenderer>();
                 lines.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.Off;
                 lines.receiveShadows = false;
 
@@ -238,13 +228,13 @@ namespace BoardSystem
                 lines.endWidth = 0.1f;
                 lines.startColor = Color.black;
                 lines.endColor = Color.black;
-                lines.material = lineMaterial;
+                lines.material = _lineMaterial;
 
                 lines.positionCount = 7;
 
-                for (int vert = 0; vert <= 6; vert++)
+                for (int vertex = 0; vertex <= 6; vertex++)
                 {
-                    lines.SetPosition(vert, Tile.GetCorner(tile.transform.position, hexRadius, vert));
+                    lines.SetPosition(vertex, Tile.GetCorner(tile.transform.position, _hexRadius, vertex));
                 }
                     
             }
