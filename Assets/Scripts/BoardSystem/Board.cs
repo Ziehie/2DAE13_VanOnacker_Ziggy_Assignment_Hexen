@@ -53,7 +53,7 @@ namespace BoardSystem
 
             foreach (var tile in _board)
             {
-                DestroyImmediate(tile.Value.gameObject, false);
+                Destroy(tile.Value.gameObject);
             }
             _board.Clear();
         }
@@ -157,7 +157,6 @@ namespace BoardSystem
         private void Awake()
         {
             if (!instance) instance = this;
-            GenerateBoard();
         }
 
         private void GetMesh()
@@ -189,7 +188,7 @@ namespace BoardSystem
             }
         }
 
-        private Tile CreateHexTile(Vector3 postion, string name)
+        private Tile CreateHexTile(Vector3 position, string name)
         {
             GameObject hexObject = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(Tile));
 
@@ -199,7 +198,7 @@ namespace BoardSystem
             if (_enableOutlines)
                 hexObject.AddComponent<LineRenderer>();
 
-            hexObject.transform.position = postion;
+            hexObject.transform.position = position;
             hexObject.transform.parent = this.transform;
 
             Tile tile = hexObject.GetComponent<Tile>();
