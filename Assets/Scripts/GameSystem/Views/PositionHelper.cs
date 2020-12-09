@@ -1,37 +1,68 @@
-﻿using UnityEngine;
+﻿using BoardSystem;
+using GameSystem.Models;
+using GameSystem.Utils;
+using UnityEngine;
 
 namespace GameSystem.Views
 {
     [CreateAssetMenu(fileName = "DefaultPositionHelper", menuName = "GameSystem/PositionHelper")]
     public class PositionHelper : ScriptableObject
     {
-        //[SerializeField] private Vector3 _tileSize = Vector3.one;
+        [SerializeField] private Vector3 _tileSize = Vector3.one;
+        public Vector3 TileSize => _tileSize;
 
-        //public Vector3 TileSize => _tileSize;
+        public Position ToBoardPosition(Board<HexPiece> board, Vector3 worldPosition) //pixel to point
+        {
+            var q = (Mathf.Sqrt(3) / 3f * worldPosition.x - 1f/ 3 * worldPosition.z);
+            var r = (2f / 3f * worldPosition.z);
+            var rounded = HexRound(new Vector3(q, -q - r, r));
 
-        //public Position ToBoardPosition(Board<ChessPiece> board, Vector3 worldPosition)
-        //{
-        //    var boardSize = Vector3.Scale(board.AsVector3(), TileSize);
-        //    var boardOffset = (TileSize - boardSize) / 2;
+            var boardPosition = new Position()
+            {
+                X = (int)(rounded.x),
+                Y = (int)(rounded.y),
+                Z = (int)(rounded.z)
+            };
+            return boardPosition;
+        }
 
-        //    boardOffset.y = 0;
+        public Vector3 ToWorldPosition(Board<HexPiece> board, Position tileOnBoardPosition)
+        {
+            var hex = tileOnBoardPosition.AsVector3();
 
-        //    var offset = worldPosition - boardOffset;
-        //    var boardPosition = new Position { X = (int)(offset.x / TileSize.x), Y = (int)(offset.z / TileSize.z) };
+            Vector3 toWorldHex = new Vector3
+            {
+                x = (Mathf.Sqrt(3) * hex.x + Mathf.Sqrt(3) / 2f * hex.y),
+                z = (3f / 2f * hex.y)
+            };
 
-        //    return boardPosition;
-        //}
+            return toWorldHex;
+        }
 
-        //public Vector3 ToWorldPosition(Board<ChessPiece> board, Position boardPosition)
-        //{
-        //    var boardSize = Vector3.Scale(board.AsVector3(), TileSize);
-        //    var boardOffset = (TileSize - boardSize) / 2;
+        public Vector3 HexRound(Vector3 hexCubeCoords)
+        {
+            var rx = Mathf.Round(hexCubeCoords.x);
+            var ry = Mathf.Round(hexCubeCoords.y);
+            var rz = Mathf.Round(hexCubeCoords.z);
 
-        //    boardOffset.y = 0;
+            var xDiff = Mathf.Abs(rx - hexCubeCoords.x);
+            var yDiff = Mathf.Abs(ry - hexCubeCoords.y);
+            var zDiff = Mathf.Abs(rz - hexCubeCoords.z);
 
-        //    var tilePosition = boardOffset + Vector3.Scale(boardPosition.AsVector3(), TileSize);
+            if (xDiff > yDiff && xDiff > zDiff)
+            {
+                rx = -ry - rz;
+            }
+            else if (yDiff > zDiff)
+            {
+                ry = -rx - rz;
+            }
 
-        //    return tilePosition;
-        //}
+            else
+            {
+                rz = -rx - ry;
+            }
+            return new Vector3(rx, ry, rz);
+        }
     }
 }

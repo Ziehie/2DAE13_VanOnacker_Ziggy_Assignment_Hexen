@@ -1,103 +1,72 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
 namespace BoardSystem
 {
-    public class Board : MonoBehaviour
+    public class PiecePlacedEventArgs<TPiece> : EventArgs where TPiece : class, IAction<TPiece>
     {
-        public static Board instance;
+        public TPiece Piece { get; }
+        public PiecePlacedEventArgs(TPiece piece)
+        {
+            Piece = piece;
+        }
+    }
 
-        //Map settings
-        [SerializeField] private int _mapWidth = 3;
-        [SerializeField] private int _mapHeight = 2;
+    public class Board<TPiece> where TPiece : class, IAction<TPiece>
+    {
+        private Dictionary<Position, Tile> _tiles = new Dictionary<Position, Tile>();
+        private List<Tile> _keys = new List<Tile>();
+        private List<TPiece> _values = new List<TPiece>();
 
-        //Tile Settings
-        [SerializeField] private float _tileRadius = 1;
-        [SerializeField] private Material _tileMaterial= null;
+        public event EventHandler<PiecePlacedEventArgs<TPiece>> PiecePlaced;
+        public List<Tile> Tiles => _tiles.Values.ToList();
 
-        private Dictionary<string, Tile> _board = new Dictionary<string, Tile>();
-        private Mesh _hexMesh = null;
+        public readonly int Radius;
 
-        private CubeIndex[] _directions =
-            new CubeIndex[]
+        public Board(int radius)
+        {
+            Radius = radius;
+
+            InitiateTiles();
+        }
+
+        private void InitiateTiles()
+        {
+            for (var q = -Radius; q <= Radius; q++)
             {
-                new CubeIndex(1, -1, 0),
-                new CubeIndex(1, 0, -1),
-                new CubeIndex(0, 1, -1),
-                new CubeIndex(-1, 1, 0),
-                new CubeIndex(-1, 0, 1),
-                new CubeIndex(0, -1, 1)
-            };
+                var r1 = Math.Max(-Radius, -q - Radius);
+                var r2 = Math.Min(Radius, -q + Radius);
 
-        public Dictionary<string, Tile> Tiles => _board;
-
-        #region Public Methods
-
-        public void GenerateBoard()
-        {
-            ClearBoard();
-            GetMesh();
-            GenerateHexShapedBoard();
-        }
-
-        public void ClearBoard()
-        {
-#if UNITY_EDITOR
-            foreach (var tile in _board)
-            {
-                DestroyImmediate(tile.Value.gameObject);
-            }
-#endif
-            _board.Clear();
-        }
-
-        public Tile TileAt(CubeIndex index)
-        {
-            return _board.ContainsKey(index.ToString()) ? _board[index.ToString()] : null;
-        }
-
-        public Tile TileAt(int x, int y, int z)
-        {
-            return TileAt(new CubeIndex(x, y, z));
-        }
-
-        public Tile TileAt(int x, int z)
-        {
-            return TileAt(new CubeIndex(x, z));
-        }
-
-        public List<Tile> GetNeighbors(Tile tile)
-        {
-            List<Tile> tiles = new List<Tile>();
-
-            if (tile == null) return tiles;
-
-            for (int i = 0; i < 6; i++)
-            {
-                var cubeIdx = tile.index + _directions[i];
-                if (_board.ContainsKey(cubeIdx.ToString()))
+                for (var r = r1; r <= r2; r++)
                 {
-                    tiles.Add(_board[cubeIdx.ToString()]);
+                    _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(q, r, -q - r));
                 }
             }
-            return tiles;
         }
 
-        public List<Tile> GetNeighbors(CubeIndex index)
+        public Tile TileAt(Position position)
         {
-            return GetNeighbors(TileAt(index));
+            if (_tiles.TryGetValue(position, out var tile)) return tile;
+
+            return null;
         }
 
-        public List<Tile> GetNeighbors(int x, int y, int z)
+        public Tile TileOf(TPiece piece)
         {
-            return GetNeighbors(TileAt(x, y, z));
+            var index = _values.IndexOf(piece);
+
+            if (index == -1) return null;
+
+            return _keys[index];
         }
 
-        public List<Tile> GetNeighbors(int x, int z)
+        protected virtual void OnPiecePlaced(PiecePlacedEventArgs<TPiece> args)
         {
-            return GetNeighbors(TileAt(x, z));
+            EventHandler<PiecePlacedEventArgs<TPiece>> handler = PiecePlaced;
+            handler?.Invoke(this, args);
         }
 
         public List<Tile> TilesInRange(Tile center, int range)
@@ -110,28 +79,18 @@ namespace BoardSystem
                 for (int dy = Mathf.Max(-range, -dx - range); dy <= Mathf.Min(range, -dx + range); dy++)
                 {
                     cubeIdx = new CubeIndex(dx, dy, -dx - dy) + center.index;
-                    if (_board.ContainsKey(cubeIdx.ToString()))
-                    {
-                        tiles.Add(_board[cubeIdx.ToString()]);
-                    }
+                    //if (_board.ContainsKey(cubeIdx.ToString()))
+                    //{
+                    //    tiles.Add(_board[cubeIdx.ToString()]);
+                    //}
                 }
             }
             return tiles;
         }
 
-        public List<Tile> TilesInRange(CubeIndex index, int range)
+        public List<Tile> TilesInRange(Position position, int range)
         {
-            return TilesInRange(TileAt(index), range);
-        }
-
-        public List<Tile> TilesInRange(int x, int y, int z, int range)
-        {
-            return TilesInRange(TileAt(x, y, z), range);
-        }
-
-        public List<Tile> TilesInRange(int x, int z, int range)
-        {
-            return TilesInRange(TileAt(x, z), range);
+            return TilesInRange(TileAt(position), range);
         }
 
         public int Distance(CubeIndex a, CubeIndex b)
@@ -144,65 +103,21 @@ namespace BoardSystem
             return Distance(a.index, b.index);
         }
 
-#endregion
-
-#region Private Methods
-
-        private void Awake()
+        public void Highlight(List<Tile> tiles)
         {
-            if (!instance) instance = this;
-        }
-
-        private void GetMesh()
-        {
-            _hexMesh = null;
-            Tile.GetHexMesh(_tileRadius, ref _hexMesh);
-        }
-
-        private void GenerateHexShapedBoard()
-        {
-            Debug.Log("Generating board...");
-
-            Vector3 pos = Vector3.zero;
-            int mapSize = Mathf.Max(_mapWidth, _mapHeight);
-
-            for (int q = -mapSize; q <= mapSize; q++)
+            foreach (var tile in tiles)
             {
-                int r1 = Mathf.Max(-mapSize, -q - mapSize);
-                int r2 = Mathf.Min(mapSize, -q + mapSize);
-                for (int r = r1; r <= r2; r++)
-                {
-                    pos.x = _tileRadius * 3.0f / 2.0f * q;
-                    pos.z = _tileRadius * Mathf.Sqrt(3.0f) * (r + q / 2.0f);
-
-                    var tile = CreateHexTile(pos, ("Hex[" + q + "," + r + "," + (-q - r).ToString() + "]"));
-                    tile.index = new CubeIndex(q, r, -q - r);
-                    _board.Add(tile.index.ToString(), tile);
-                }
+                tile.IsHighlighted = true;
             }
         }
 
-        private Tile CreateHexTile(Vector3 position, string name)
+        public void UnHighlight(List<Tile> tiles)
         {
-            GameObject hexObject = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(Tile));
-
-
-            hexObject.transform.position = position;
-            hexObject.transform.parent = this.transform;
-
-            Tile tile = hexObject.GetComponent<Tile>();
-            MeshFilter meshFilter = hexObject.GetComponent<MeshFilter>();
-            MeshRenderer meshRenderer = hexObject.GetComponent<MeshRenderer>();
-
-            meshFilter.sharedMesh = _hexMesh;
-
-            meshRenderer.material = (_tileMaterial)
-                ? _tileMaterial
-                : UnityEditor.AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
-
-            return tile;
+            foreach (var tile in tiles)
+            {
+                tile.IsHighlighted = false;
+            }
         }
-#endregion
     }
 }
 

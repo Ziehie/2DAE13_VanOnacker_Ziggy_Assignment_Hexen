@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91ac2266e1d675d48973667514a459d2, type: 3}
+  m_Name: DefaultHexPieceViewFactory
+  m_EditorClassIdentifier: 
+  _hexPieceViews: []
+  _movementNames: []
+  _positionHelper: {fileID: 11400000, guid: c6216bf108f0ebd4c8813dc99481492e, type: 2}
