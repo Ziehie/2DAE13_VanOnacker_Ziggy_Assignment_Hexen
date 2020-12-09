@@ -6,25 +6,14 @@ using UnityEngine;
 
 namespace BoardSystem
 {
-    public class PiecePlacedEventArgs<TPiece> : EventArgs where TPiece : class, IAction<TPiece>
-    {
-        public TPiece Piece { get; }
-        public PiecePlacedEventArgs(TPiece piece)
-        {
-            Piece = piece;
-        }
-    }
-
     public class Board<TPiece> where TPiece : class, IAction<TPiece>
     {
         private Dictionary<Position, Tile> _tiles = new Dictionary<Position, Tile>();
         private List<Tile> _keys = new List<Tile>();
         private List<TPiece> _values = new List<TPiece>();
-
-        public event EventHandler<PiecePlacedEventArgs<TPiece>> PiecePlaced;
-        public List<Tile> Tiles => _tiles.Values.ToList();
-
         public readonly int Radius;
+        public List<Tile> Tiles => _tiles.Values.ToList();
+        public List<Position> Positions => _tiles.Keys.ToList<Position>();
 
         public Board(int radius)
         {
@@ -42,7 +31,7 @@ namespace BoardSystem
 
                 for (var r = r1; r <= r2; r++)
                 {
-                    _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(q, r, -q - r));
+                    _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(new Position(r, -q - r)));
                 }
             }
         }
@@ -63,10 +52,45 @@ namespace BoardSystem
             return _keys[index];
         }
 
-        protected virtual void OnPiecePlaced(PiecePlacedEventArgs<TPiece> args)
+        public TPiece PieceAt(Tile tile)
         {
-            EventHandler<PiecePlacedEventArgs<TPiece>> handler = PiecePlaced;
-            handler?.Invoke(this, args);
+            var index = _keys.IndexOf(tile);
+
+            if (index == -1) return null;
+
+            return _values[index];
+        }
+
+        public TPiece Take(Tile fromTile)
+        {
+            var index = _keys.IndexOf(fromTile);
+
+            if (index == -1) return null;
+
+            TPiece piece = _values[index];
+            _values.RemoveAt(index);
+            _keys.RemoveAt(index);
+            piece.Taken();
+
+            return piece;
+        }
+
+        public void Move(Tile fromTile, Tile toTile)
+        {
+            int index = _keys.IndexOf(fromTile);
+
+            if (index == -1 || PieceAt(toTile) != null) return;
+
+            _keys[index] = toTile;
+            _values[index].Moved(fromTile, toTile);
+        }
+
+        public void Place(Tile toTile, TPiece piece)
+        {
+            if (_keys.Contains(toTile) || _values.Contains(piece)) return;
+
+            _keys.Add(toTile);
+            _values.Add(piece);
         }
 
         public void Highlight(List<Tile> tiles)

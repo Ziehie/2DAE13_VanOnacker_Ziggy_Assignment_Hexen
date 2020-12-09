@@ -1,24 +1,25 @@
 ﻿using System;
-using UnityEngine;
 
 namespace BoardSystem
 {
     public class Tile
     {
         public event EventHandler HighlightStatusChanged;
-        private bool _isHighlighted = false;
-        public CubeIndex index;
+        private bool _isHighlighted;
         public Position Position { get; }
 
         public bool IsHighlighted
         {
             get => _isHighlighted;
-            internal set { _isHighlighted = value; OnHighlightStatusChanged(EventArgs.Empty); }
+            internal set
+            {
+                _isHighlighted = value; OnHighlightStatusChanged(EventArgs.Empty);
+            }
         }
 
-        public Tile(int x, int y, int z)
+        public Tile(Position position)
         {
-            Position = new Position { X = x, Y = y, Z = z };
+            Position = position;
         }
 
         protected virtual void OnHighlightStatusChanged(EventArgs args)

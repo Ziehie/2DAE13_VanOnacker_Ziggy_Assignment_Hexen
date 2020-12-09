@@ -5,7 +5,6 @@ using GameSystem.Views;
 using UnityEngine;
 using BoardSystem;
 using GameSystem.Models;
-using MoveSystem;
 using Utils;
 
 public class GameLoop : SingletonMonobehaviour<GameLoop>
@@ -15,9 +14,6 @@ public class GameLoop : SingletonMonobehaviour<GameLoop>
 
     private HexPiece _selectedPiece = null;
     private List<Tile> _validTiles = new List<Tile>();
-    private IMoveCommand<HexPiece> _currentMoveCommand;
-
-    public MoveManager<HexPiece> MoveManager { get; internal set; }
 
     public Board<HexPiece> Board { get; } = new Board<HexPiece>(3);
     public HexPiece SelectedPiece => _selectedPiece;

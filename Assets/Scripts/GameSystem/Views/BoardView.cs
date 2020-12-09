@@ -30,13 +30,13 @@ namespace GameSystem.Views
         {
             Model = null;
         }
-        private void OnPiecePlaced(object sender, PiecePlacedEventArgs<HexPiece> e)
-        {
-            var board = sender as Board<HexPiece>;
-            var piece = e.Piece;
+        //private void OnPiecePlaced(object sender, PiecePlacedEventArgs<HexPiece> e)
+        //{
+        //    var board = sender as Board<HexPiece>;
+        //    var piece = e.Piece;
 
-            _hexPieceViewFactory.CreateHexPieceView(board, piece);
-        }
+        //    _hexPieceViewFactory.CreateHexPieceView(board, piece);
+        //}
     }
 }
 

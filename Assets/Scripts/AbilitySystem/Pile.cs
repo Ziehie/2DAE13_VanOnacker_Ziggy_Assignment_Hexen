@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AbilitySystem
 {
-    class Pile
+    public class Pile
     {
     }
 }
