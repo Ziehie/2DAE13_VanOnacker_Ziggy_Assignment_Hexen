@@ -69,40 +69,6 @@ namespace BoardSystem
             handler?.Invoke(this, args);
         }
 
-        public List<Tile> TilesInRange(Tile center, int range)
-        {
-            List<Tile> tiles = new List<Tile>();
-            CubeIndex cubeIdx;
-
-            for (int dx = -range; dx <= range; dx++)
-            {
-                for (int dy = Mathf.Max(-range, -dx - range); dy <= Mathf.Min(range, -dx + range); dy++)
-                {
-                    cubeIdx = new CubeIndex(dx, dy, -dx - dy) + center.index;
-                    //if (_board.ContainsKey(cubeIdx.ToString()))
-                    //{
-                    //    tiles.Add(_board[cubeIdx.ToString()]);
-                    //}
-                }
-            }
-            return tiles;
-        }
-
-        public List<Tile> TilesInRange(Position position, int range)
-        {
-            return TilesInRange(TileAt(position), range);
-        }
-
-        public int Distance(CubeIndex a, CubeIndex b)
-        {
-            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) + Mathf.Abs(a.z - b.z);
-        }
-
-        public int Distance(Tile a, Tile b)
-        {
-            return Distance(a.index, b.index);
-        }
-
         public void Highlight(List<Tile> tiles)
         {
             foreach (var tile in tiles)

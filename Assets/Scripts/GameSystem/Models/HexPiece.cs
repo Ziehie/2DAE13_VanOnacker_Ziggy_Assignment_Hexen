@@ -13,9 +13,8 @@ namespace GameSystem.Models
         public Tile From { get; }
         public Tile To { get; }
 
-        public HexPieceMovedEventArgs(Board<HexPiece> board, Tile from, Tile to)
+        public HexPieceMovedEventArgs( Tile from, Tile to)
         {
-            Board = board;
             From = from;
             To = to;
         }
@@ -33,12 +32,12 @@ namespace GameSystem.Models
             MovementName = movementName;
         }
 
-        void IAction<HexPiece>.Moved(Board<HexPiece> board, Tile fromTile, Tile toTile)
+        void IAction<HexPiece>.Moved(Tile fromTile, Tile toTile)
         {
-            OnHexPieceMoved(new HexPieceMovedEventArgs(board, fromTile, toTile));
+            OnHexPieceMoved(new HexPieceMovedEventArgs(fromTile, toTile));
         }
 
-        void IAction<HexPiece>.Taken(Board<HexPiece> board)
+        void IAction<HexPiece>.Taken()
         {
             OnHexPieceTaken(EventArgs.Empty);
         }
