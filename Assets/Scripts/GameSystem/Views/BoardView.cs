@@ -10,7 +10,6 @@ namespace GameSystem.Views
     {
 
         [SerializeField] private TileViewFactory _tileViewFactory;
-        [SerializeField] private readonly HexPieceViewFactory _hexPieceViewFactory = null;
         private Board<HexPiece> _model;
 
         public Board<HexPiece> Model
@@ -25,18 +24,6 @@ namespace GameSystem.Views
                 // (_model != null) value.PiecePlaced += OnPiecePlaced;
             }
         }
-
-        private void OnDestroy()
-        {
-            Model = null;
-        }
-        //private void OnPiecePlaced(object sender, PiecePlacedEventArgs<HexPiece> e)
-        //{
-        //    var board = sender as Board<HexPiece>;
-        //    var piece = e.Piece;
-
-        //    _hexPieceViewFactory.CreateHexPieceView(board, piece);
-        //}
     }
 }
 
