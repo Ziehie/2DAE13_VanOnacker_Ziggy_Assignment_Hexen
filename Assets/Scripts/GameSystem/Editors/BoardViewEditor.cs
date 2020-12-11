@@ -13,19 +13,32 @@ namespace BoardSystem.Editor
         {
             base.OnInspectorGUI();
 
+            var boardView = target as BoardView;
+            var tileViewFactorySp = serializedObject.FindProperty("_tileViewFactory");
+            var tileViewFactory = tileViewFactorySp.objectReferenceValue as TileViewFactory;
+            var game = GameLoop.Instance;
+            var board = game.Board;
+
             if (GUILayout.Button("Generate Hex Board"))
             {
-                var boardView = target as BoardView;
-                var tileViewFactorySp = serializedObject.FindProperty("_tileViewFactory");
-                var tileViewFactory = tileViewFactorySp.objectReferenceValue as TileViewFactory;
-                var game = GameLoop.Instance;
-                var board = game.Board;
-
                 Debug.Assert(boardView != null, nameof(boardView) + " != null");
 
                 foreach (var tile in board.Tiles)
                 {
                     tileViewFactory?.CreateTileView(board, tile, boardView.transform);
+                }
+            }
+            if (GUILayout.Button("Clear Hex Board"))
+            {
+                Debug.Assert(boardView != null, nameof(boardView) + " != null");
+
+                foreach (var tile in board.Tiles)
+                {
+#if UNITY_EDITOR
+                    //DestroyImmediate(tile.Value.gameObject, false);
+#endif
+                    //Destroy(tile.Value.gameObject);
+                    //board.Clear();
                 }
             }
         }
