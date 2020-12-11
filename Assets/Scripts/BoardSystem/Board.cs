@@ -13,7 +13,7 @@ namespace BoardSystem
         private List<TPiece> _values = new List<TPiece>();
         public readonly int Radius;
         public List<Tile> Tiles => _tiles.Values.ToList();
-        public List<Position> Positions => _tiles.Keys.ToList<Position>();
+        public List<Position> Positions => _tiles.Keys.ToList();
 
         public Board(int radius)
         {

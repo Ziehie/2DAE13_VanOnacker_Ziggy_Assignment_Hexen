@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AbilitySystem
 {
-    public class Pile<TAbility>
+    public class ActiveHand<TAbility>
     {
+
     }
 }
