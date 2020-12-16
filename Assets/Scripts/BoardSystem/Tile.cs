@@ -17,10 +17,7 @@ namespace BoardSystem
             }
         }
 
-        public Tile(Position position)
-        {
-            Position = position;
-        }
+        public Tile(Position position) => Position = position;
 
         protected virtual void OnHighlightStatusChanged(EventArgs args)
         {
