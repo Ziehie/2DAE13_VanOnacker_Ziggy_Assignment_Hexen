@@ -25,20 +25,7 @@ namespace BoardSystem.Editor
 
                 foreach (var tile in board.Tiles)
                 {
-                    tileViewFactory?.CreateTileView(board, tile, boardView.transform);
-                }
-            }
-            if (GUILayout.Button("Clear Hex Board"))
-            {
-                Debug.Assert(boardView != null, nameof(boardView) + " != null");
-
-                foreach (var tile in board.Tiles)
-                {
-#if UNITY_EDITOR
-                    //DestroyImmediate(tile.Value.gameObject, false);
-#endif
-                    //Destroy(tile.Value.gameObject);
-                    //board.Clear();
+                    tileViewFactory?.CreateTileView(tile, boardView.transform);
                 }
             }
         }

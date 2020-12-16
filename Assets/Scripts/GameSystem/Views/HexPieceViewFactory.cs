@@ -24,7 +24,7 @@ namespace GameSystem.Views
             var hexPieceView = GameObject.Instantiate<HexPieceView>(prefab);
             var tile = board.TileOf(model);
 
-            hexPieceView.transform.position = _positionHelper.ToWorldPosition(board, tile.Position);
+            hexPieceView.transform.position = _positionHelper.ToWorldPosition(tile.Position);
             hexPieceView.name = $"Spawned HexPiece ( {model.MovementName} )";
             hexPieceView.Model = model;
 

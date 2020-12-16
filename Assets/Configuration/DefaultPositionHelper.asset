@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d218e9b08adc0f4fb25f7d997d41c50, type: 3}
   m_Name: DefaultPositionHelper
   m_EditorClassIdentifier: 
-  _tileSize: {x: 5, y: 0.1, z: 5}
+  _tileRadius: 1

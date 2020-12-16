@@ -40,8 +40,7 @@ namespace GameSystem.Views
 
         private void ModelMoved(object sender, HexPieceMovedEventArgs e)
         {
-            var board = e.Board;
-            var worldPosition = _positionHelper.ToWorldPosition(board, e.To.Position);
+            var worldPosition = _positionHelper.ToWorldPosition(e.To.Position);
             transform.position = worldPosition;
         }
 

@@ -8,10 +8,10 @@ namespace GameSystem.Views
     [CreateAssetMenu(fileName = "DefaultPositionHelper", menuName = "GameSystem/PositionHelper")]
     public class PositionHelper : ScriptableObject
     {
-        [SerializeField] private Vector3 _tileSize = Vector3.one;
-        public Vector3 TileSize => _tileSize;
+        [SerializeField] private float _tileRadius = 1f;
+        public float TileRadius => _tileRadius;
 
-        public Position ToBoardPosition(Board<HexPiece> board, Vector3 worldPosition) //pixel to point
+        public Position ToBoardPosition(Vector3 worldPosition) //pixel to point
         {
             var q = (Mathf.Sqrt(3) / 3f * worldPosition.x - 1f/ 3 * worldPosition.z);
             var r = (2f / 3f * worldPosition.z);
@@ -26,7 +26,12 @@ namespace GameSystem.Views
             return boardPosition;
         }
 
-        public Vector3 ToWorldPosition(Board<HexPiece> board, Position tileOnBoardPosition)
+        public Vector3 ToLocalPosition(Position boardPosition)
+        {
+            return Vector3.one;
+        }
+
+        public Vector3 ToWorldPosition(Position tileOnBoardPosition)
         {
             var hex = tileOnBoardPosition.AsVector3();
 

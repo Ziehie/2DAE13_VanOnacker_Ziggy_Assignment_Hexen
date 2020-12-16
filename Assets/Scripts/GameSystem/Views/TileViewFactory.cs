@@ -15,15 +15,13 @@ namespace GameSystem.Views
         [SerializeField] private TileView _tileView = null;
         [SerializeField] private PositionHelper _positionHelper = null;
 
-        public TileView CreateTileView(Board<HexPiece> board, Tile tile, Transform parent)
+        public TileView CreateTileView(Tile tile, Transform parent)
         {
-            var position = _positionHelper.ToWorldPosition(board, tile.Position);
-            var tileView = Instantiate(_tileView, position, Quaternion.identity, parent);
+            var tileView = Instantiate(_tileView, _positionHelper.ToWorldPosition(tile.Position), Quaternion.identity, parent);
 
-            tileView.Size = _positionHelper.TileSize;
+            tileView.Radius = _positionHelper.TileRadius;
             tileView.name = $"Tile [ {tile.Position.X}, {tile.Position.Y}, {tile.Position.Z} ]";
 
-            tileView.Model = tile;
             return tileView;
         }
     }
