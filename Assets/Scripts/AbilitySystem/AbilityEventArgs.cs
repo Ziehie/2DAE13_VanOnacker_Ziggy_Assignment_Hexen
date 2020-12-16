@@ -6,9 +6,6 @@ namespace AbilitySystem
     {
         public string Ability { get; }
 
-        public AbilityEventArgs(string ability)
-        {
-            Ability = ability;
-        }
+        public AbilityEventArgs(string ability) => Ability = ability;
     }
 }
