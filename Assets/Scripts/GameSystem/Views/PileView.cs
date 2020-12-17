@@ -1,12 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
+using AbilitySystem;
+using GameSystem.Abilities;
+using Utils;
 
 namespace GameSystem.Views
 {
-    class PileView
+    public class PileView : MonoBehaviour
     {
+        private Pile<AbilityBase> _model;
+
+        private void Start()
+        {
+            SingletonMonobehaviour<GameLoop>.Instance.Initialized += OnGameLoopInitialized;
+        }
+
+        private void InitializeAbilities()
+        {
+            List<string> abilities = _model.Abilities;
+        }
+
+        private void OnGameLoopInitialized(object sender, EventArgs e)
+        {
+            _model = SingletonMonobehaviour<GameLoop>.Instance.Pile;
+            InitializeAbilities();
+        }
     }
 }

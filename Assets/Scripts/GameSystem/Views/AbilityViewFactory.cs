@@ -3,10 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.GameSystem.Views;
+using UnityEngine;
 
-namespace Assets.Scripts.GameSystem.Views
+namespace GameSystem.Views
 {
-    class AbilityViewFactory
+    [CreateAssetMenu(fileName = "DefaultAbilityViewFactory", menuName = "GameSystem/AbilityViewFactory")]
+    public class AbilityViewFactory : ScriptableObject
     {
+        [SerializeField] private List<AbilityView> _abilityViews = new List<AbilityView>();
+        [SerializeField] private List<string> _abilityNames = new List<string>();
+
+        public AbilityView CreateAbilityView(Transform transform, string ability)
+        {
+            int index = _abilityNames.IndexOf(ability);
+
+            if (index == -1)
+            {
+                Debug.Log("No name found for " + ability);
+            }
+            var abilityView = Instantiate(_abilityViews.ElementAt(index), transform);
+
+            abilityView.Model = ability;
+            abilityView.name = ability;
+            return abilityView;
+        }
     }
 }

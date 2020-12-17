@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 using BoardSystem;
-using UnityEngine;
 
 namespace GameSystem.Views
 {
-    public class ActiveHandView : HexPieceView
+    public class EnemyView : HexPieceView
     {
         [SerializeField] private PositionHelper _positionHelper = null;
         private Transform _boardView;
