@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BoardSystem
 {
-    public class Board<TPiece> where TPiece : class, IAction<TPiece>
+    public class Board<TPiece> where TPiece : class, IAction
     {
         private Dictionary<Position, Tile> _tiles = new Dictionary<Position, Tile>();
         private List<Tile> _keys = new List<Tile>();

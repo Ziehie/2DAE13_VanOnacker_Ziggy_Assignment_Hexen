@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BoardSystem;
-using GameSystem.Models;
 using UnityEngine;
 
 namespace GameSystem.Views
@@ -17,7 +16,7 @@ namespace GameSystem.Views
 
         public TileView CreateTileView(Tile tile, Transform parent)
         {
-            var tileView = Instantiate(_tileView, _positionHelper.ToWorldPosition(tile.Position), Quaternion.identity, parent);
+            var tileView = Instantiate(_tileView, _positionHelper.ToLocalPosition(tile.Position), Quaternion.identity, parent);
 
             tileView.Radius = _positionHelper.TileRadius;
             tileView.name = $"Tile [ {tile.Position.X}, {tile.Position.Y}, {tile.Position.Z} ]";

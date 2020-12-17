@@ -1,7 +1,7 @@
 ﻿using System;
 using BoardSystem;
-using GameSystem.Models;
 using UnityEngine;
+using Utils;
 
 
 namespace GameSystem.Views
@@ -10,19 +10,16 @@ namespace GameSystem.Views
     {
 
         [SerializeField] private TileViewFactory _tileViewFactory;
-        private Board<HexPiece> _model;
+        private Board<HexPieceView> _model;
 
-        public Board<HexPiece> Model
+        public void Start()
         {
-            get => _model;
-            set
-            {
-                //if (_model == null) value.PiecePlaced -= OnPiecePlaced;
+            SingletonMonobehaviour<GameLoop>.Instance.Initialized += OnGameLoopInitialized;
+        }
 
-                _model = value;
-
-                // (_model != null) value.PiecePlaced += OnPiecePlaced;
-            }
+        private void OnGameLoopInitialized(object sender, EventArgs e)
+        {
+            _model = SingletonMonobehaviour<GameLoop>.Instance.Board;
         }
     }
 }

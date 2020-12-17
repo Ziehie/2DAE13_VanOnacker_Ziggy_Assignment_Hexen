@@ -1,6 +1,6 @@
 ﻿namespace BoardSystem
 {
-    public interface IAction<TPiece> where TPiece : class, IAction<TPiece>
+    public interface IAction
     {
         void Moved(Tile fromTile, Tile toTile);
 

@@ -1,7 +1,8 @@
-﻿using BoardSystem;
-using GameSystem.Models;
+﻿using UnityEngine;
+using BoardSystem;
 using GameSystem.Utils;
-using UnityEngine;
+
+
 
 namespace GameSystem.Views
 {
@@ -11,10 +12,10 @@ namespace GameSystem.Views
         [SerializeField] private float _tileRadius = 1f;
         public float TileRadius => _tileRadius;
 
-        public Position ToBoardPosition(Vector3 worldPosition) //pixel to point
+        public Position ToBoardPosition(Vector3 localPosition) //Pixel to hex
         {
-            var q = (Mathf.Sqrt(3) / 3f * worldPosition.x - 1f/ 3 * worldPosition.z);
-            var r = (2f / 3f * worldPosition.z);
+            var q = (Mathf.Sqrt(3) / 3f * localPosition.x - 1f/ 3 * localPosition.z);
+            var r = (2f / 3f * localPosition.z);
             var rounded = HexRound(new Vector3(q, -q - r, r));
 
             var boardPosition = new Position()
@@ -28,20 +29,22 @@ namespace GameSystem.Views
 
         public Vector3 ToLocalPosition(Position boardPosition)
         {
-            return Vector3.one;
-        }
+            var hex = boardPosition.AsVector3();
 
-        public Vector3 ToWorldPosition(Position tileOnBoardPosition)
-        {
-            var hex = tileOnBoardPosition.AsVector3();
-
-            Vector3 toWorldHex = new Vector3
+            Vector3 toLocalHex = new Vector3
             {
                 x = (Mathf.Sqrt(3) * hex.x + Mathf.Sqrt(3) / 2f * hex.y),
                 z = (3f / 2f * hex.y)
             };
 
-            return toWorldHex;
+            return toLocalHex;
+        }
+
+        public Vector3 ToWorldPosition(Transform transform, Position boardPosition)
+        {
+            Vector3 localPos = ToLocalPosition(boardPosition);
+
+            return (transform.localToWorldMatrix * localPos);
         }
 
         public Vector3 HexRound(Vector3 hexCubeCoords)

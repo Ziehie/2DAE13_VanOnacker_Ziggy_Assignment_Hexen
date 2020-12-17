@@ -1,7 +1,9 @@
-﻿using BoardSystem;
+﻿using Assets.Scripts.GameSystem.Views;
+using BoardSystem;
 using GameSystem.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Utils;
 
 namespace GameSystem.Views
 {
@@ -82,13 +84,19 @@ namespace GameSystem.Views
 
         public void OnPointerEnter(PointerEventData pointerEventData)
         {
-            //Output to console the GameObject's name and the following message
             Debug.Log("Cursor Entering " + name + " GameObject");
+
+            var pointerDrag = pointerEventData.pointerDrag;
+            if (pointerDrag != null) return;
+
+            var component = pointerDrag.GetComponent<AbilityView>();
+            if (component != null) return;
+
+            //SingletonMonobehaviour<GameLoop>.Instance
         }
 
         public void OnPointerExit(PointerEventData pointerEventData)
         {
-            //Output the following message with the GameObject's name
             Debug.Log("Cursor Exiting " + name + " GameObject");
         }
     }
