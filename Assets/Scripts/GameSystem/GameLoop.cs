@@ -18,6 +18,8 @@ public class GameLoop : SingletonMonobehaviour<GameLoop>
     private PlayerView _playerView;
     private List<Tile> _validTiles = new List<Tile>();
 
+    private AbilityBase _draggedAbility;
+
     public Board<HexPieceView> Board = new Board<HexPieceView>(3);
     public Pile<AbilityBase> Pile { get; set; }
     public ActiveHand<AbilityBase> ActiveHand { get; set; }
@@ -28,5 +30,10 @@ public class GameLoop : SingletonMonobehaviour<GameLoop>
     {
         EventHandler handler = Initialized;
         handler?.Invoke(this, arg);
+    }
+
+    internal void OnAbilityBeginDrag(string ability)
+    {
+        _draggedAbility = Pile.GetAbilityAction(ability);
     }
 }

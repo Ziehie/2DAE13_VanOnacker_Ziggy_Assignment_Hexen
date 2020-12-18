@@ -9,9 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91ac2266e1d675d48973667514a459d2, type: 3}
-  m_Name: DefaultHexPieceViewFactory
+  m_Script: {fileID: 11500000, guid: 196c75d15ea5fea48865c97d40087899, type: 3}
+  m_Name: DefaultAbilityViewFactory
   m_EditorClassIdentifier: 
-  _hexPieceViews: []
-  _movementNames: []
-  _positionHelper: {fileID: 11400000, guid: c6216bf108f0ebd4c8813dc99481492e, type: 2}
+  _abilityViews:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _abilityNames:
+  - ForwardAttack
+  - Knockback
+  - SwingAttack
+  - Teleport

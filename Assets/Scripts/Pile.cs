@@ -47,5 +47,7 @@ namespace AbilitySystem
 
             return true;
         }
+
+        public TAbilityAction GetAbilityAction(string ability) => _abilityActions.ContainsKey(ability) ? _abilityActions[ability] : default;
     }
 }
