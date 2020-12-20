@@ -21,10 +21,29 @@ public class GameLoop : SingletonMonobehaviour<GameLoop>
     private AbilityBase _draggedAbility;
 
     public Board<HexPieceView> Board = new Board<HexPieceView>(3);
-    public Pile<AbilityBase> Pile { get; set; }
+    public Pile<AbilityBase> Pile { get; private set; }
     public ActiveHand<AbilityBase> ActiveHand { get; set; }
 
     public event EventHandler Initialized;
+
+    private void Start()
+    {
+        Pile = new Pile<AbilityBase>();
+
+        ActiveHand = Pile.CreateActiveHand(5);
+        _boardView = FindObjectOfType<BoardView>();
+
+        ConnectPlayer();
+        ConnectEnemies();
+
+        StartCoroutine(PostStart());
+    }
+
+    private IEnumerator PostStart()
+    {
+        yield return new WaitForEndOfFrame();
+        OnInitialized(EventArgs.Empty);
+    }
 
     protected virtual void OnInitialized(EventArgs arg)
     {
@@ -35,5 +54,19 @@ public class GameLoop : SingletonMonobehaviour<GameLoop>
     internal void OnAbilityBeginDrag(string ability)
     {
         _draggedAbility = Pile.GetAbilityAction(ability);
+    }
+
+    private void ConnectPlayer()
+    {
+        _playerView = FindObjectOfType<PlayerView>();
+        Board.Place(Board.TileAt(_positionHelper.ToBoardPosition(_boardView.transform, _playerView.transform.position)), _playerView);
+    }
+
+    private void ConnectEnemies()
+    {
+        foreach (var enemyView in FindObjectsOfType<EnemyView>())
+        {
+            Board.Place(Board.TileAt(_positionHelper.ToBoardPosition(_boardView.transform, enemyView.transform.position)), enemyView);
+        }
     }
 }

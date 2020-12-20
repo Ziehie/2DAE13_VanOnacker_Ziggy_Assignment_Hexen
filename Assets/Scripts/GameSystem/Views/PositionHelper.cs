@@ -27,6 +27,8 @@ namespace GameSystem.Views
             return boardPosition;
         }
 
+        public Position ToBoardPosition(Transform transform, Vector3 worldPosition) => ToBoardPosition((transform.worldToLocalMatrix * worldPosition));
+
         public Vector3 ToLocalPosition(Position boardPosition)
         {
             var hex = boardPosition.AsVector3();

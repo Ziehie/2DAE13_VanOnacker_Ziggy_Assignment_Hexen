@@ -8,7 +8,7 @@ namespace AbilitySystem
 {
     public class Pile<TAbilityAction>
     {
-        private List<string> _abilities = new List<string>();
+        private List<string> _abilities = new List<string>(); 
         private Dictionary<string, TAbilityAction> _abilityActions = new Dictionary<string, TAbilityAction>();
 
         public List<string> Abilities => _abilities;
