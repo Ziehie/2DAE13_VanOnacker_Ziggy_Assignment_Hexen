@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.GameSystem.Views;
-using BoardSystem;
+﻿using BoardSystem;
 using GameSystem.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;

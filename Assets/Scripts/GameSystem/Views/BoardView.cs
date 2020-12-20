@@ -14,12 +14,12 @@ namespace GameSystem.Views
 
         public void Start()
         {
-            SingletonMonobehaviour<GameLoop>.Instance.Initialized += OnGameLoopInitialized;
+            GameLoop.Instance.Initialized += OnGameLoopInitialized;
         }
 
         private void OnGameLoopInitialized(object sender, EventArgs e)
         {
-            _model = SingletonMonobehaviour<GameLoop>.Instance.Board;
+            _model = GameLoop.Instance.Board;
         }
     }
 }

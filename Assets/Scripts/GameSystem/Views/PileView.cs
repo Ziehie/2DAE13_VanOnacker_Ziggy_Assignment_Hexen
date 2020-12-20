@@ -13,7 +13,7 @@ namespace GameSystem.Views
 
         private void Start()
         {
-            SingletonMonobehaviour<GameLoop>.Instance.Initialized += OnGameLoopInitialized;
+            GameLoop.Instance.Initialized += OnGameLoopInitialized;
         }
 
         private void InitializeAbilities()
@@ -23,7 +23,7 @@ namespace GameSystem.Views
 
         private void OnGameLoopInitialized(object sender, EventArgs e)
         {
-            _model = SingletonMonobehaviour<GameLoop>.Instance.Pile;
+            _model = GameLoop.Instance.Pile;
             InitializeAbilities();
         }
     }

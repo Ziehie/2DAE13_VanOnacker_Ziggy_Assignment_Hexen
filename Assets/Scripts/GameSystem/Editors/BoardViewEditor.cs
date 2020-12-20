@@ -1,4 +1,5 @@
-﻿using GameSystem.Views;
+﻿using GameSystem;
+using GameSystem.Views;
 using UnityEditor;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;

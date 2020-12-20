@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
-namespace Assets.Scripts.GameSystem.Views
+namespace GameSystem.Views
 {
     public class AbilityView : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
@@ -25,7 +26,7 @@ namespace Assets.Scripts.GameSystem.Views
             CreateDraggable();
             UpdateDraggable(eventData);
 
-            SingletonMonobehaviour<GameLoop>.Instance.OnAbilityBeginDrag(Model);
+            GameLoop.Instance.OnAbilityBeginDrag(Model);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -71,6 +72,18 @@ namespace Assets.Scripts.GameSystem.Views
 
             component.position = worldPoint;
             component.rotation = _draggingTransform.rotation;
+        }
+
+        private void DestroyDraggable()
+        {
+            if (_draggable == null) return;
+            Destroy(_draggable);
+        }
+
+        public void Destroy()
+        {
+            DestroyDraggable();
+            Destroy(gameObject);
         }
     }
 }

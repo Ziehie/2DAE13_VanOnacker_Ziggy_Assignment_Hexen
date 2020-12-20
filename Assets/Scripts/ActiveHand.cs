@@ -5,8 +5,8 @@ namespace AbilitySystem
 {
     public class ActiveHand<TAbilityAction>
     {
-        private Pile<TAbilityAction> _pile;
-        private int _maxAmountOfAbilities;
+        private readonly Pile<TAbilityAction> _pile;
+        private readonly int _maxAmountOfAbilities;
 
         public List<string> Abilities { get; } = new List<string>();
 
@@ -17,6 +17,7 @@ namespace AbilitySystem
         {
             _pile = pile;
             _maxAmountOfAbilities = maxAmountOfAbilities;
+            InitializeActiveHand();
         }
 
         protected virtual void OnAbilityAdded(AbilityEventArgs args)

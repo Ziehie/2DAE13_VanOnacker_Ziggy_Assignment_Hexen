@@ -1,30 +1,61 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BoardSystem;
+﻿using System;
+using System.Collections.Generic;
+using AbilitySystem;
+using GameSystem.Abilities;
 using UnityEngine;
+using Utils;
 
 namespace GameSystem.Views
 {
-    public class ActiveHandView : HexPieceView
+    public class ActiveHandView : MonoBehaviour
     {
-        [SerializeField] private PositionHelper _positionHelper = null;
-        private Transform _boardView;
+        [SerializeField] private AbilityViewFactory _abilityViewFactory = null;
+        private ActiveHand<AbilityBase> _model;
+        private List<string> _abilities = new List<string>();
+        private List<AbilityView> _abilityViews = new List<AbilityView>();
 
         private void Start()
         {
-            _boardView = Object.FindObjectOfType<BoardView>().transform;
+            GameLoop.Instance.Initialized += OnGameLoopInitialized;
         }
 
-        public override void Moved(Tile fromTile, Tile toTile)
+        private void OnGameLoopInitialized(object sender, EventArgs e)
         {
-            transform.position = _positionHelper.ToWorldPosition(_boardView, toTile.Position);
+           _model = GameLoop.Instance.ActiveHand;
+           _model.AbilityAdded += OnAbilityAdded;
+           _model.AbilityRemoved += OnAbilityRemoved;
+           InitializeAbilityView();
         }
 
-        public override void Taken()
+        private void OnAbilityRemoved(object sender, AbilityEventArgs e)
         {
-            Destroy(gameObject);
+            int index = _abilities.IndexOf(e.Ability);
+            var abilityView = _abilityViews[index];
+            _abilities.RemoveAt(index);
+            _abilityViews.RemoveAt(index);
+            abilityView.Destroy();
+        }
+
+        private void OnAbilityAdded(object sender, AbilityEventArgs e)
+        {
+            InitializeAbilityView(e.Ability);
+        }
+
+        public void InitializeAbilityView()
+        {
+            foreach (string ability in _model.Abilities)
+            {
+                InitializeAbilityView(ability);
+            }
+        }
+
+        private void InitializeAbilityView(string ability)
+        {
+            var view = _abilityViewFactory.CreateAbilityView(transform, ability);
+            view.transform.SetParent(transform);
+            view.name = $"Ability ( {ability} )";
+            _abilities.Add(ability);
+            _abilityViews.Add(view);
         }
     }
 }

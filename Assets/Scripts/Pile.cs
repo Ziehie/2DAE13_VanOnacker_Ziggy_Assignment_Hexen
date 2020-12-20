@@ -21,7 +21,7 @@ namespace AbilitySystem
             }
         }
 
-        public void AddAbilityActions(string ability, TAbilityAction tAbilityAction)
+        public void AddAbilityAction(string ability, TAbilityAction tAbilityAction)
         {
             if (_abilityActions.ContainsKey(ability))
                 return;
