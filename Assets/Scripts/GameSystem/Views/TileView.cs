@@ -73,23 +73,16 @@ namespace GameSystem.Views
             transform.localScale = new Vector3(xSize, num, z2);
         }
 
-        public void OnDrop(PointerEventData data)
-        {
-            if (data.pointerDrag != null)
-            {
-                Debug.Log("Dropped object was: " + data.pointerDrag);
-            }
-        }
 
         public void OnPointerEnter(PointerEventData pointerEventData)
         {
             Debug.Log("Cursor Entering " + name + " GameObject");
 
             var pointerDrag = pointerEventData.pointerDrag;
-            if (pointerDrag != null) return;
+            if (pointerDrag == null) return;
 
             var component = pointerDrag.GetComponent<AbilityView>();
-            if (component != null) return;
+            if (component == null) return;
 
            GameLoop.Instance.OnCardHoldActivity(_model, component.Model, true);
         }
@@ -97,6 +90,30 @@ namespace GameSystem.Views
         public void OnPointerExit(PointerEventData pointerEventData)
         {
             Debug.Log("Cursor Exiting " + name + " GameObject");
+
+            var pointerDrag = pointerEventData.pointerDrag;
+            if (pointerDrag == null) return;
+
+            var component = pointerDrag.GetComponent<AbilityView>();
+            if (component == null) return;
+
+            GameLoop.Instance.OnCardHoldActivity(_model, component.Model, false);
+        }
+
+        public void OnDrop(PointerEventData pointerEventData)
+        {
+            if (pointerEventData.pointerDrag != null)
+            {
+                Debug.Log("Released object was: " + pointerEventData.pointerDrag);
+            }
+
+            var pointerDrag = pointerEventData.pointerDrag;
+            if (pointerDrag == null) return;
+
+            var component = pointerDrag.GetComponent<AbilityView>();
+            if (component == null) return;
+
+            GameLoop.Instance.OnAbilityReleased(component.Model, _model);
         }
     }
 }

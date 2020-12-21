@@ -3715,7 +3715,7 @@ GameObject:
   - component: {fileID: 1200758517}
   - component: {fileID: 1200758516}
   - component: {fileID: 1200758515}
-  - component: {fileID: 1200758518}
+  - component: {fileID: 1200758519}
   m_Layer: 5
   m_Name: PileView
   m_TagString: Untagged
@@ -3804,7 +3804,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200758513}
   m_CullTransparentMesh: 0
---- !u!114 &1200758518
+--- !u!114 &1200758519
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3813,9 +3813,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1200758513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0373b6b8fd5af0a47a66c1d11381adf2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1db859c62b64e1d4b867c40324df86a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _abilityViewFactory: {fileID: 11400000, guid: ee1d18941bd968b48923e89165a38882,
+    type: 2}
 --- !u!1 &1207251788
 GameObject:
   m_ObjectHideFlags: 0
