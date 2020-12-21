@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BoardSystem;
 using GameSystem.Abilities;
+using UnityEngine;
 
 namespace Assets.Scripts.GameSystem.Abilities
 {
@@ -18,7 +19,7 @@ namespace Assets.Scripts.GameSystem.Abilities
 
         public override void OnTileRelease(Tile playerTile, Tile holdTile)
         {
-            throw new NotImplementedException();
+            Debug.Log("Knockback");
         }
     }
 }

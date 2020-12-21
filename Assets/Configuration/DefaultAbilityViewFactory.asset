@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DefaultAbilityViewFactory
   m_EditorClassIdentifier: 
   _abilityViews:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4784908611315636842, guid: 0acf95e821119e940b82c86859bd4401, type: 3}
+  - {fileID: 944419765619693060, guid: b49bf038001f2a2419731c333390bfbb, type: 3}
+  - {fileID: 4560367751224864566, guid: 64e4329a3ac8e7645a6db46f20e532e8, type: 3}
+  - {fileID: 3526347814762440017, guid: 72ad1e778fb1ebb489a4af7b170846b6, type: 3}
   _abilityNames:
   - ForwardAttack
   - Knockback

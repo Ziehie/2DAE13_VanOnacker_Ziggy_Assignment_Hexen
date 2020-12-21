@@ -10,7 +10,7 @@ namespace GameSystem.Views
 
         private void Start()
         {
-            _boardView = Object.FindObjectOfType<BoardView>().transform;
+            _boardView = FindObjectOfType<BoardView>().transform;
         }
 
         public override void Moved(Tile fromTile, Tile toTile)

@@ -8,23 +8,21 @@ namespace AbilitySystem
 {
     public class Pile<TAbilityAction>
     {
-        private List<string> _abilities = new List<string>(); 
         private Dictionary<string, TAbilityAction> _abilityActions = new Dictionary<string, TAbilityAction>();
 
-        public List<string> Abilities => _abilities;
+        public List<string> Abilities { get; } = new List<string>();
 
         public void AddAbility(string ability, int amount = 1)
         {
             for (int i = 0; i < amount; i++)
             {
-                _abilities.Add(ability);
+                Abilities.Add(ability);
             }
         }
 
         public void AddAbilityAction(string ability, TAbilityAction tAbilityAction)
         {
-            if (_abilityActions.ContainsKey(ability))
-                return;
+            if (_abilityActions.ContainsKey(ability)) return;
             _abilityActions.Add(ability, tAbilityAction);
         }
 
@@ -35,15 +33,15 @@ namespace AbilitySystem
 
         public bool TryTakeAbility(out string ability)
         {
-            Random random = new Random();
+            var random = new Random();
             ability = null;
 
-            if (_abilities.Count == 0) return false;
+            if (Abilities.Count == 0) return false;
 
-            int idx = random.Next(_abilities.Count);
-            ability = _abilities.ElementAt(idx);
+            int idx = random.Next(Abilities.Count);
+            ability = Abilities.ElementAt(idx);
 
-            _abilities.RemoveAt(idx);
+            Abilities.RemoveAt(idx);
 
             return true;
         }

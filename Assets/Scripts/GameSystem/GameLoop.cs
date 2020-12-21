@@ -35,8 +35,8 @@ namespace GameSystem
             ActiveHand = Pile.CreateActiveHand(5);
             _boardView = FindObjectOfType<BoardView>();
 
-            //ConnectPlayer();
-            //ConnectEnemies();
+            ConnectPlayer();
+            ConnectEnemies();
 
             StartCoroutine(PostStart());
         }
@@ -57,7 +57,7 @@ namespace GameSystem
         {
             Pile.AddAbilityAction("ForwardAttack", new ForwardAttackAbility());
             Pile.AddAbilityAction("SwingAttack", new SwingAttackAbility());
-            Pile.AddAbilityAction("Teleport", new TeleportAbility());
+            Pile.AddAbilityAction("Teleport", new TeleportAbility(Board));
             Pile.AddAbilityAction("Knockback", new KnockbackAbility());
             Pile.AddAbility("ForwardAttack", 3);
             Pile.AddAbility("SwingAttack", 3);
@@ -68,6 +68,41 @@ namespace GameSystem
         internal void OnAbilityBeginDrag(string ability)
         {
             _draggedAbility = Pile.GetAbilityAction(ability);
+        }
+
+        internal void OnAbilityReleased(string ability, Tile holdTile)
+        {
+            if (_draggedAbility == null) return;
+
+            Board.UnHighlight(_validTiles);
+
+            if (!_validTiles.Contains(holdTile))
+            {
+                _draggedAbility = null;
+            }
+            else
+            {
+                _draggedAbility.OnTileRelease(Board.TileOf(_playerView), holdTile);
+                ActiveHand.RemoveAbility(ability);
+                ActiveHand.InitializeActiveHand();
+            }
+            _validTiles.Clear();
+        }
+
+        internal void OnCardHoldActivity(Tile holdTile, string ability, bool active)
+        {
+            if (_draggedAbility == null) return;
+
+            if (active)
+            {
+               _validTiles = _draggedAbility.OnTileHold(Board.TileOf(_playerView), holdTile);
+               Board.Highlight(_validTiles);
+            }
+            else
+            {
+                Board.UnHighlight(_validTiles);
+                _validTiles.Clear();
+            }
         }
 
         private void ConnectPlayer()

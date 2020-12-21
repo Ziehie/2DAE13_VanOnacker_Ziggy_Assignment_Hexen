@@ -24,6 +24,7 @@ namespace GameSystem.Views
            _model = GameLoop.Instance.ActiveHand;
            _model.AbilityAdded += OnAbilityAdded;
            _model.AbilityRemoved += OnAbilityRemoved;
+
            InitializeAbilityView();
         }
 
@@ -31,6 +32,7 @@ namespace GameSystem.Views
         {
             int index = _abilities.IndexOf(e.Ability);
             var abilityView = _abilityViews[index];
+
             _abilities.RemoveAt(index);
             _abilityViews.RemoveAt(index);
             abilityView.Destroy();
@@ -52,8 +54,10 @@ namespace GameSystem.Views
         private void InitializeAbilityView(string ability)
         {
             var view = _abilityViewFactory.CreateAbilityView(transform, ability);
+
             view.transform.SetParent(transform);
             view.name = $"Ability ( {ability} )";
+
             _abilities.Add(ability);
             _abilityViews.Add(view);
         }

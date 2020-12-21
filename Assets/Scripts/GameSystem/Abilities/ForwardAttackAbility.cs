@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BoardSystem;
+using UnityEngine;
 
 namespace GameSystem.Abilities
 {
@@ -14,7 +15,7 @@ namespace GameSystem.Abilities
 
         public override void OnTileRelease(Tile playerTile, Tile holdTile)
         {
-            throw new NotImplementedException();
+            Debug.Log("ForwardAttack");
         }
     }
 }

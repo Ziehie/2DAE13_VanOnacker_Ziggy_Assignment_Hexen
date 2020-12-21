@@ -91,7 +91,7 @@ namespace GameSystem.Views
             var component = pointerDrag.GetComponent<AbilityView>();
             if (component != null) return;
 
-            //SingletonMonobehaviour<GameLoop>.Instance
+           GameLoop.Instance.OnCardHoldActivity(_model, component.Model, true);
         }
 
         public void OnPointerExit(PointerEventData pointerEventData)

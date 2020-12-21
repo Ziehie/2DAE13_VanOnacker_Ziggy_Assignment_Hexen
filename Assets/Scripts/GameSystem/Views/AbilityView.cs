@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameSystem;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
@@ -18,11 +12,7 @@ namespace GameSystem.Views
         public string Model { get; internal set; }
         public void OnBeginDrag(PointerEventData eventData)
         {
-            Canvas canvas = GetCanvas(gameObject);
-            if (canvas == null) return;
-
-            _draggingTransform = canvas.transform as RectTransform;
-
+            LocateDraggingTransform();
             CreateDraggable();
             UpdateDraggable(eventData);
 
@@ -36,13 +26,12 @@ namespace GameSystem.Views
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (_draggable == null) return;
-            Destroy(_draggable);
+            DestroyDraggable();
         }
 
         private Canvas GetCanvas(GameObject go)
         {
-            Canvas canvas = gameObject.GetComponent<Canvas>();
+            var canvas = gameObject.GetComponent<Canvas>();
             if (canvas != null) return canvas;
 
             for (var parent = go.transform.parent; parent != null && canvas == null; parent = parent.parent)
@@ -52,13 +41,22 @@ namespace GameSystem.Views
             return canvas;
         }
 
+        private void LocateDraggingTransform()
+        {
+            var canvas = GetCanvas(gameObject);
+            if (canvas == null) return;
+
+            _draggingTransform = canvas.transform as RectTransform;
+        }
+
         private void CreateDraggable()
         {
             _draggable = new GameObject("AbilityIcon");
             _draggable.transform.SetParent(_draggingTransform, false);
 
             _draggable.transform.SetAsLastSibling();
-            Image image = _draggable.AddComponent<Image>();
+
+            var image = _draggable.AddComponent<Image>();
             image.raycastTarget = false;
             image.sprite = GetComponent<Image>().sprite;
             image.SetNativeSize();
@@ -66,7 +64,7 @@ namespace GameSystem.Views
 
         private void UpdateDraggable(PointerEventData eventData)
         {
-            RectTransform component = _draggable.GetComponent<RectTransform>();
+            var component = _draggable.GetComponent<RectTransform>();
             if (!RectTransformUtility.ScreenPointToWorldPointInRectangle(_draggingTransform, eventData.position, eventData.pressEventCamera, out var worldPoint))
                 return;
 

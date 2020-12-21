@@ -18,7 +18,7 @@ namespace GameSystem.Views
 
         private void InitializeAbilities()
         {
-            List<string> abilities = _model.Abilities;
+           var abilities = _model.Abilities;
         }
 
         private void OnGameLoopInitialized(object sender, EventArgs e)
