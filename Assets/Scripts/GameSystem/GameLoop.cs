@@ -55,10 +55,11 @@ namespace GameSystem
 
         private void AddAbilities()
         {
-            Pile.AddAbilityAction("ForwardAttack", new ForwardAttackAbility());
-            Pile.AddAbilityAction("SwingAttack", new SwingAttackAbility());
+            Pile.AddAbilityAction("ForwardAttack", new ForwardAttackAbility(Board));
+            Pile.AddAbilityAction("SwingAttack", new SwingAttackAbility(Board));
             Pile.AddAbilityAction("Teleport", new TeleportAbility(Board));
-            Pile.AddAbilityAction("Knockback", new KnockbackAbility());
+            Pile.AddAbilityAction("Knockback", new KnockbackAbility(Board));
+
             Pile.AddAbility("ForwardAttack", 3);
             Pile.AddAbility("SwingAttack", 3);
             Pile.AddAbility("Teleport", 3);

@@ -23,7 +23,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4686135192176343430}
-  - component: {fileID: 3317193976713133673}
   - component: {fileID: 3955778540220459779}
   m_Layer: 0
   m_Name: Tile
@@ -47,20 +46,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &3317193976713133673
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7005047335951686833}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -951608786083511892, guid: 24a9348b7fb57a54d93a137d42162def, type: 3}
 --- !u!114 &3955778540220459779
 MonoBehaviour:
   m_ObjectHideFlags: 0

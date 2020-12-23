@@ -51,7 +51,7 @@ namespace GameSystem.Views
 
         private void CreateDraggable()
         {
-            _draggable = new GameObject("AbilityIcon");
+            _draggable = new GameObject("CurrentAbility");
             _draggable.transform.SetParent(_draggingTransform, false);
 
             _draggable.transform.SetAsLastSibling();
@@ -59,7 +59,9 @@ namespace GameSystem.Views
             var image = _draggable.AddComponent<Image>();
             image.raycastTarget = false;
             image.sprite = GetComponent<Image>().sprite;
+            
             image.SetNativeSize();
+            image.rectTransform.sizeDelta /= 2;
         }
 
         private void UpdateDraggable(PointerEventData eventData)

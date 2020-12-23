@@ -31,7 +31,7 @@ namespace BoardSystem
 
                 for (var r = r1; r <= r2; r++)
                 {
-                    _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(new Position(r, -q - r)));
+                    _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(new Position(q, r, -q-r)));
                 }
             }
         }

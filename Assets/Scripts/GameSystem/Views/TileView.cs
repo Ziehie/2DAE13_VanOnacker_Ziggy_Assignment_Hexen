@@ -10,7 +10,7 @@ namespace GameSystem.Views
     [SelectionBase]
     public class TileView : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] private PositionHelper _positionHelper;
+        [SerializeField] private PositionHelper _positionHelper = null;
         [SerializeField] private Material _highlightMaterial = null;
         [SerializeField] private bool _isMeshScale = false;
 
@@ -44,7 +44,7 @@ namespace GameSystem.Views
             _model.HighlightStatusChanged += OnModelHighlightStatusChanged;
         }
 
-        private void OnModelHighlightStatusChanged(object sender, System.EventArgs e)
+        private void OnModelHighlightStatusChanged(object sender, EventArgs e)
         {
             _meshRenderer.material = _model.IsHighlighted ? _highlightMaterial : _originalMaterial;
         }
@@ -53,7 +53,7 @@ namespace GameSystem.Views
         {
             transform.localScale = Vector3.one;
 
-            (float w, float h) tuple = HexUtils.PointyDimension(_radius);
+            (float w, float h) tuple = PointyDimension(_radius);
             float width = tuple.w;
             float height = tuple.h;
 
@@ -69,8 +69,6 @@ namespace GameSystem.Views
 
         public void OnPointerEnter(PointerEventData pointerEventData)
         {
-            //Debug.Log("Cursor Entering " + name + " GameObject");
-
             var pointerDrag = pointerEventData.pointerDrag;
             if (pointerDrag == null) return;
 
@@ -82,8 +80,6 @@ namespace GameSystem.Views
 
         public void OnPointerExit(PointerEventData pointerEventData)
         {
-            //Debug.Log("Cursor Exiting " + name + " GameObject");
-
             var pointerDrag = pointerEventData.pointerDrag;
             if (pointerDrag == null) return;
 
@@ -95,11 +91,6 @@ namespace GameSystem.Views
 
         public void OnDrop(PointerEventData pointerEventData)
         {
-            if (pointerEventData.pointerDrag != null)
-            {
-                Debug.Log("Released object was: " + pointerEventData.pointerDrag);
-            }
-
             var pointerDrag = pointerEventData.pointerDrag;
             if (pointerDrag == null) return;
 
@@ -108,5 +99,7 @@ namespace GameSystem.Views
 
             GameLoop.Instance.OnAbilityReleased(component.Model, _model);
         }
+
+        public static (float w, float h) PointyDimension(float size) => (Mathf.Sqrt(3f) * size, 2f * size);
     }
 }
