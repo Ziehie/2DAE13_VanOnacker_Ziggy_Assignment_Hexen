@@ -9,7 +9,7 @@ namespace AbilitySystem
     public class Pile<TAbilityAction>
     {
         private Dictionary<string, TAbilityAction> _abilityActions = new Dictionary<string, TAbilityAction>();
-
+        Random random = new Random();
         public List<string> Abilities { get; } = new List<string>();
 
         public void AddAbility(string ability, int amount = 1)
@@ -33,7 +33,6 @@ namespace AbilitySystem
 
         public bool TryTakeAbility(out string ability)
         {
-            var random = new Random();
             ability = null;
 
             if (Abilities.Count == 0) return false;

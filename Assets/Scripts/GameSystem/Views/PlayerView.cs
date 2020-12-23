@@ -15,7 +15,8 @@ namespace GameSystem.Views
 
         public override void Moved(Tile fromTile, Tile toTile)
         {
-            transform.position = _positionHelper.ToWorldPosition(_boardView, toTile.Position);
+            //transform.position = _positionHelper.ToWorldPosition(_boardView, toTile.Position);
+            transform.position = _positionHelper.ToLocalPosition(toTile.Position);
         }
 
         public override void Taken() {}

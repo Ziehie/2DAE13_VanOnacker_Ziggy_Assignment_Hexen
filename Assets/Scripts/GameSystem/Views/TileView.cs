@@ -1,4 +1,5 @@
-﻿using BoardSystem;
+﻿using System;
+using BoardSystem;
 using GameSystem.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,23 +25,8 @@ namespace GameSystem.Views
             {
                 _radius = value;
                 if (!_isMeshScale) return;
+
                 SetModelSize();
-            }
-        }
-
-        internal Tile Model
-        {
-            get => _model;
-            set
-            {
-                if (_model != null) _model.HighlightStatusChanged -= ModelHighlightStatusChanged;
-
-                _model = value;
-
-                if (_model != null)
-                {
-                    _model.HighlightStatusChanged += ModelHighlightStatusChanged;
-                }
             }
         }
 
@@ -48,11 +34,19 @@ namespace GameSystem.Views
         {
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
             _originalMaterial = _meshRenderer.sharedMaterial;
+
+            GameLoop.Instance.Initialized += OnGameInitialized;
         }
 
-        private void ModelHighlightStatusChanged(object sender, System.EventArgs e)
+        private void OnGameInitialized(object sender, EventArgs e)
         {
-            _meshRenderer.material = Model.IsHighlighted ? _highlightMaterial : _originalMaterial;
+            _model = GameLoop.Instance.Board.TileAt(_positionHelper.ToBoardPosition(transform.localPosition));
+            _model.HighlightStatusChanged += OnModelHighlightStatusChanged;
+        }
+
+        private void OnModelHighlightStatusChanged(object sender, System.EventArgs e)
+        {
+            _meshRenderer.material = _model.IsHighlighted ? _highlightMaterial : _originalMaterial;
         }
 
         private void SetModelSize()
@@ -73,10 +67,9 @@ namespace GameSystem.Views
             transform.localScale = new Vector3(xSize, num, z2);
         }
 
-
         public void OnPointerEnter(PointerEventData pointerEventData)
         {
-            Debug.Log("Cursor Entering " + name + " GameObject");
+            //Debug.Log("Cursor Entering " + name + " GameObject");
 
             var pointerDrag = pointerEventData.pointerDrag;
             if (pointerDrag == null) return;
@@ -84,12 +77,12 @@ namespace GameSystem.Views
             var component = pointerDrag.GetComponent<AbilityView>();
             if (component == null) return;
 
-           GameLoop.Instance.OnCardHoldActivity(_model, component.Model, true);
+           GameLoop.Instance.OnAbilityHoldActivity(_model, component.Model, true);
         }
 
         public void OnPointerExit(PointerEventData pointerEventData)
         {
-            Debug.Log("Cursor Exiting " + name + " GameObject");
+            //Debug.Log("Cursor Exiting " + name + " GameObject");
 
             var pointerDrag = pointerEventData.pointerDrag;
             if (pointerDrag == null) return;
@@ -97,7 +90,7 @@ namespace GameSystem.Views
             var component = pointerDrag.GetComponent<AbilityView>();
             if (component == null) return;
 
-            GameLoop.Instance.OnCardHoldActivity(_model, component.Model, false);
+            GameLoop.Instance.OnAbilityHoldActivity(_model, component.Model, false);
         }
 
         public void OnDrop(PointerEventData pointerEventData)

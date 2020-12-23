@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04789812ecd0584438c0ed0a483e9377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _positionHelper: {fileID: 0}
+  _positionHelper: {fileID: 11400000, guid: c6216bf108f0ebd4c8813dc99481492e, type: 2}
   _highlightMaterial: {fileID: 2100000, guid: 600650916501c104e96061b94a147bca, type: 2}
   _isMeshScale: 0
 --- !u!1001 &2705923410453855274

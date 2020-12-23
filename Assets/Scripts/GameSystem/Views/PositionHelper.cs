@@ -35,8 +35,8 @@ namespace GameSystem.Views
 
             Vector3 toLocalHex = new Vector3
             {
-                x = (Mathf.Sqrt(3) * hex.x + Mathf.Sqrt(3) / 2f * hex.y),
-                z = (3f / 2f * hex.y)
+                x = (Mathf.Sqrt(3) * hex.x + Mathf.Sqrt(3) / 2f * hex.z),
+                z = (3f / 2f * hex.z)
             };
 
             return toLocalHex;

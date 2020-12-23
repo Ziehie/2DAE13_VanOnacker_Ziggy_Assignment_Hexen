@@ -89,7 +89,7 @@ namespace GameSystem
             _validTiles.Clear();
         }
 
-        internal void OnCardHoldActivity(Tile holdTile, string ability, bool active)
+        internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
         {
             if (_draggedAbility == null) return;
 
