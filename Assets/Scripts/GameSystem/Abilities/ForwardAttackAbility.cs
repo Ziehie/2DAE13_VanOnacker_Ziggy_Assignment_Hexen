@@ -26,7 +26,7 @@ namespace GameSystem.Abilities
 
             foreach (var direction in (OffsetDirection[])Enum.GetValues(typeof(OffsetDirection)))
             {
-                var tileList2 = _boardCalculationHelper.Lines(playerTile, direction);
+                var tileList2 = _boardCalculationHelper.GetLines(playerTile, direction);
                 if (tileList2.Contains(holdTile))
                 {
                     return tileList2;

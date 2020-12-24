@@ -4,8 +4,9 @@ namespace BoardSystem
 {
     public class Tile
     {
-        public event EventHandler HighlightStatusChanged;
         private bool _isHighlighted;
+
+        public event EventHandler HighlightStatusChanged;
         public Position Position { get; }
 
         public bool IsHighlighted

@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace Utils
 {
-    
-}
-public class DontDestroyOnLoad : MonoBehaviour
-{
-    private void Start()
+    public class DontDestroyOnLoad : MonoBehaviour
     {
-        DontDestroyOnLoad(gameObject);
+        private void Start()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }

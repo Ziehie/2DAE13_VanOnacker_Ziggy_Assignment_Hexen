@@ -18,14 +18,13 @@ namespace GameSystem
         private BoardView _boardView;
         private PlayerView _playerView;
         private List<Tile> _validTiles = new List<Tile>();
-
         private AbilityBase _draggedAbility;
+
+        public event EventHandler Initialized;
 
         public Board<HexPieceView> Board = new Board<HexPieceView>(3);
         public Pile<AbilityBase> Pile { get; private set; }
         public ActiveHand<AbilityBase> ActiveHand { get; set; }
-
-        public event EventHandler Initialized;
 
         private void Start()
         {

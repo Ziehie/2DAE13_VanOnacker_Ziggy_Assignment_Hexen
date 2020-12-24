@@ -41,7 +41,7 @@ namespace GameSystem.BoardCalculations
 
         public Tile TileAdd(Tile tile, Position direction) => _board.TileAt(Add(tile, direction));
 
-        public List<Tile> Lines(Tile center, OffsetDirection direction)
+        public List<Tile> GetLines(Tile center, OffsetDirection direction)
         {
             List<Tile> tiles = new List<Tile>();
 
@@ -53,18 +53,6 @@ namespace GameSystem.BoardCalculations
             {
                 tiles.Add(goTile);
                 goTile = TileAdd(goTile, value.OffsetPosition);
-            }
-
-            return tiles;
-        }
-
-        public List<Tile> GetCrossLines(Tile center)
-        {
-            List<Tile> tiles = new List<Tile>();
-
-            foreach (var offset in _offsetValues)
-            {
-                tiles.AddRange(Lines(center, offset.Key));
             }
 
             return tiles;
@@ -82,13 +70,6 @@ namespace GameSystem.BoardCalculations
             };
 
             return Add(startTile, newPos);
-        }
-
-        public Tile GetNeighbour(Tile startTile, OffsetDirection direction)
-        {
-            _offsetValues.TryGetValue(direction, out var value);
-
-            return TileAdd(startTile, value.OffsetPosition);
         }
 
         public Position GetOffset(Position position, OffsetDirection direction, int scale = 1)
@@ -116,8 +97,7 @@ namespace GameSystem.BoardCalculations
                 tileList.Add(startTile);
             }
 
-            //amount of directions = 6
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++) //6 = amount of hexdirections
             {
                 for (int j = 0; j < radius; j++)
                 {
@@ -137,6 +117,25 @@ namespace GameSystem.BoardCalculations
         {
             return (nr % mod + mod) % mod;
         }
+
+        //public List<Tile> GetCrossLines(Tile center)
+        //{
+        //    List<Tile> tiles = new List<Tile>();
+
+        //    foreach (var offset in _offsetValues)
+        //    {
+        //        tiles.AddRange(GetLines(center, offset.Key));
+        //    }
+
+        //    return tiles;
+        //}
+
+        //public Tile GetNeighbour(Tile startTile, OffsetDirection direction)
+        //{
+        //    _offsetValues.TryGetValue(direction, out var value);
+
+        //    return TileAdd(startTile, value.OffsetPosition);
+        //}
     }
 }
 
