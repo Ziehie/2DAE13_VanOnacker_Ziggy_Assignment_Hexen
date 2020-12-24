@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AbilitySystem
 {
     public class Pile<TAbilityAction>
     {
-        private Dictionary<string, TAbilityAction> _abilityActions = new Dictionary<string, TAbilityAction>();
-        Random random = new Random();
+        private readonly Dictionary<string, TAbilityAction> _abilityActions = new Dictionary<string, TAbilityAction>();
+        private readonly Random _random = new Random();
         public List<string> Abilities { get; } = new List<string>();
 
         public void AddAbility(string ability, int amount = 1)
@@ -37,7 +35,7 @@ namespace AbilitySystem
 
             if (Abilities.Count == 0) return false;
 
-            int idx = random.Next(Abilities.Count);
+            int idx = _random.Next(Abilities.Count);
             ability = Abilities.ElementAt(idx);
 
             Abilities.RemoveAt(idx);

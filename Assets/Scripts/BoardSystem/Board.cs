@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-
 
 namespace BoardSystem
 {
     public class Board<TPiece> where TPiece : class, IAction
     {
-        private Dictionary<Position, Tile> _tiles = new Dictionary<Position, Tile>();
-        private List<Tile> _keys = new List<Tile>();
-        private List<TPiece> _values = new List<TPiece>();
+        private readonly Dictionary<Position, Tile> _tiles = new Dictionary<Position, Tile>();
+        private readonly List<Tile> _keys = new List<Tile>();
+        private readonly List<TPiece> _values = new List<TPiece>();
+
         public readonly int Radius;
         public List<Tile> Tiles => _tiles.Values.ToList();
-        public List<Position> Positions => _tiles.Keys.ToList();
 
         public Board(int radius)
         {
             Radius = radius;
-
             InitiateTiles();
         }
 
@@ -26,10 +23,10 @@ namespace BoardSystem
         {
             for (var q = -Radius; q <= Radius; q++)
             {
-                var r1 = Math.Max(-Radius, -q - Radius);
-                var r2 = Math.Min(Radius, -q + Radius);
+                var maxRadius = Math.Max(-Radius, -q - Radius);
+                var minRadius = Math.Min(Radius, -q + Radius);
 
-                for (var r = r1; r <= r2; r++)
+                for (var r = maxRadius; r <= minRadius; r++)
                 {
                     _tiles.Add(new Position { X = q, Y = r, Z = -q - r }, new Tile(new Position(q, r, -q-r)));
                 }
@@ -38,9 +35,7 @@ namespace BoardSystem
 
         public Tile TileAt(Position position)
         {
-            if (_tiles.TryGetValue(position, out var tile)) return tile;
-
-            return null;
+            return _tiles.TryGetValue(position, out var tile) ? tile : null;
         }
 
         public Tile TileOf(TPiece piece)

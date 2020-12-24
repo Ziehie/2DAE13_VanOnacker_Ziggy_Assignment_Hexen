@@ -8,10 +8,10 @@ namespace AbilitySystem
         private readonly Pile<TAbilityAction> _pile;
         private readonly int _maxAmountOfAbilities;
 
-        public List<string> Abilities { get; } = new List<string>();
-
         public event EventHandler<AbilityEventArgs> AbilityAdded;
         public event EventHandler<AbilityEventArgs> AbilityRemoved;
+
+        public List<string> Abilities { get; } = new List<string>();
 
         internal ActiveHand(Pile<TAbilityAction> pile, int maxAmountOfAbilities)
         {
