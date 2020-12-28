@@ -2,8 +2,6 @@
 using BoardSystem;
 using GameSystem.Utils;
 
-
-
 namespace GameSystem.Views
 {
     [CreateAssetMenu(fileName = "DefaultPositionHelper", menuName = "GameSystem/PositionHelper")]

@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
-
 namespace BoardSystem.Editor
 {
     [CustomEditor(typeof(BoardView))]
