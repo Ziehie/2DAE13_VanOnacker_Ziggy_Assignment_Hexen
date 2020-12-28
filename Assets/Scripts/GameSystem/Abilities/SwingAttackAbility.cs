@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BoardSystem;
 using GameSystem.Abilities;
 using GameSystem.BoardCalculations;
 using GameSystem.Views;
-using UnityEngine;
 
 namespace Assets.Scripts.GameSystem.Abilities
 {

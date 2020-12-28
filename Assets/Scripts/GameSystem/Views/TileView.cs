@@ -1,9 +1,7 @@
 ﻿using System;
 using BoardSystem;
-using GameSystem.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Utils;
 
 namespace GameSystem.Views
 {
@@ -12,7 +10,6 @@ namespace GameSystem.Views
     {
         [SerializeField] private PositionHelper _positionHelper = null;
         [SerializeField] private Material _highlightMaterial = null;
-        [SerializeField] private bool _isMeshScale = false;
 
         private Material _originalMaterial;
         private MeshRenderer _meshRenderer;
@@ -24,8 +21,6 @@ namespace GameSystem.Views
             set
             {
                 _radius = value;
-                if (!_isMeshScale) return;
-
                 SetModelSize();
             }
         }
@@ -53,18 +48,10 @@ namespace GameSystem.Views
         {
             transform.localScale = Vector3.one;
 
-            (float w, float h) tuple = PointyDimension(_radius);
-            float width = tuple.w;
-            float height = tuple.h;
-
+            Vector2 pointySize = GetPointyDimension(_radius);
             Vector3 size = GetComponentInChildren<MeshRenderer>().bounds.size;
-            float xSize = width / size.x;
-
-            float num = 1f;
-            float z1Size = size.z;
-            float z2 = (height / z1Size);
-
-            transform.localScale = new Vector3(xSize, num, z2);
+            
+            transform.localScale = new Vector3(pointySize.x / size.x, 1f, pointySize.y / size.z);
         }
 
         public void OnPointerEnter(PointerEventData pointerEventData)
@@ -100,6 +87,6 @@ namespace GameSystem.Views
             GameLoop.Instance.OnAbilityReleased(component.Model, _model);
         }
 
-        public static (float w, float h) PointyDimension(float size) => (Mathf.Sqrt(3f) * size, 2f * size);
+        public Vector2 GetPointyDimension(float radius) => new Vector2(Mathf.Sqrt(3f) * radius, 2f * radius);
     }
 }

@@ -16,7 +16,7 @@ namespace GameSystem.Views
         {
             var q = (Mathf.Sqrt(3) / 3f * localPosition.x - 1f/ 3 * localPosition.z);
             var r = (2f / 3f * localPosition.z);
-            var rounded = HexRound(new Vector3(q, -q - r, r));
+            var rounded = RoundHexCoords(new Vector3(q, -q - r, r));
 
             var boardPosition = new Position()
             {
@@ -49,7 +49,7 @@ namespace GameSystem.Views
             return (transform.localToWorldMatrix * localPos);
         }
 
-        public Vector3 HexRound(Vector3 hexCubeCoords)
+        public Vector3 RoundHexCoords(Vector3 hexCubeCoords)
         {
             var rx = Mathf.Round(hexCubeCoords.x);
             var ry = Mathf.Round(hexCubeCoords.y);

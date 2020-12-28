@@ -1,8 +1,6 @@
 ﻿using System;
 using BoardSystem;
 using UnityEngine;
-using Utils;
-
 
 namespace GameSystem.Views
 {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using BoardSystem;
 using GameSystem.Abilities;
 using GameSystem.BoardCalculations;
 using GameSystem.Views;
-using UnityEngine;
 
 namespace Assets.Scripts.GameSystem.Abilities
 {
@@ -67,7 +62,5 @@ namespace Assets.Scripts.GameSystem.Abilities
                 }
             }
         }
-
-
     }
 }
