@@ -14,8 +14,8 @@ namespace Assets.Scripts.GameSystem.Abilities
 
         public SwingAttackAbility(Board<HexPieceView> board)
         {
-            _boardCalculationHelper = new BoardCalculationHelper(board);
             _board = board;
+            _boardCalculationHelper = new BoardCalculationHelper(board);
         }
 
         public override List<Tile> OnTileHold(Tile playerTile, Tile holdTile)

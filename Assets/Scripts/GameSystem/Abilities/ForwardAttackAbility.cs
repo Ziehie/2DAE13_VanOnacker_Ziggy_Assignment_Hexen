@@ -16,8 +16,8 @@ namespace GameSystem.Abilities
 
         public ForwardAttackAbility(Board<HexPieceView> board)
         {
-            _boardCalculationHelper = new BoardCalculationHelper(board);
             _board = board;
+            _boardCalculationHelper = new BoardCalculationHelper(board);
         }
 
         public override List<Tile> OnTileHold(Tile playerTile, Tile holdTile)
