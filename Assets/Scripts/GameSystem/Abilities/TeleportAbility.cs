@@ -19,15 +19,17 @@ namespace Assets.Scripts.GameSystem.Abilities
         } 
         public override List<Tile> OnTileHold(Tile playerTile, Tile holdTile)
         {
-            //List<Tile> tileList = new List<Tile>();
+            List<Tile> tileList = new List<Tile>();
 
-            //if (_board.PieceAt(holdTile) == null)
-            //{
-            //    tileList.Add(holdTile);
-            //}
-            //return tileList;
-            var validTiles = _boardCalculationHelper.GetNeighbours(playerTile);
-            return validTiles;
+            if (_board.PieceAt(holdTile) == null)
+            {
+                tileList.Add(holdTile);
+            }
+            return tileList;
+
+            ////Used for testing valid neighbour tiles
+            //var validTiles = _boardCalculationHelper.GetNeighbours(playerTile);
+            //return validTiles;
         }
 
         public override void OnTileRelease(Tile playerTile, Tile holdTile)
