@@ -10,12 +10,12 @@ namespace Assets.Scripts.GameSystem.Abilities
     public class TeleportAbility : AbilityBase
     {
         private readonly Board<HexPieceView> _board;
-        private BoardCalculationHelper _boardCalculationHelper;
+        //private BoardCalculationHelper _boardCalculationHelper;
 
         public TeleportAbility(Board<HexPieceView> board)
         {
             _board = board;
-            _boardCalculationHelper = new BoardCalculationHelper(_board);
+            //_boardCalculationHelper = new BoardCalculationHelper(_board);
         } 
         public override List<Tile> OnTileHold(Tile playerTile, Tile holdTile)
         {

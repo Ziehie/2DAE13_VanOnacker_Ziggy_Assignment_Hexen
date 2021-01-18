@@ -10,8 +10,8 @@ namespace GameSystem.Views
     {
         [SerializeField] private AbilityViewFactory _abilityViewFactory = null;
         private ActiveHand<AbilityBase> _model;
-        private List<string> _abilities = new List<string>();
-        private List<AbilityView> _abilityViews = new List<AbilityView>();
+        private readonly List<string> _abilities = new List<string>();
+        private readonly List<AbilityView> _abilityViews = new List<AbilityView>();
 
         private void Start()
         {

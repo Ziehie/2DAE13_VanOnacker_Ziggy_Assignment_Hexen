@@ -5,7 +5,7 @@ namespace GameSystem.States
 {
     public class EnemyTurnState : GameStateBase
     {
-        private MoveCalculationHelper _moveCalculationHelper;
+        private readonly MoveCalculationHelper _moveCalculationHelper;
         public EnemyTurnState(Board<HexPieceView> board, HexPieceView player)
         {
             _moveCalculationHelper = new MoveCalculationHelper(board, player);
