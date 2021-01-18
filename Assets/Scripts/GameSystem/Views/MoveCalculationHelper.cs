@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BoardSystem;
 using GameSystem.BoardCalculations;
+using GameSystem.Utils;
+using UnityEngine;
+using Random = System.Random;
 
 namespace GameSystem.Views
 {
@@ -14,18 +16,19 @@ namespace GameSystem.Views
         private HexPieceView _player;
         private BoardCalculationHelper _boardCalculationHelper;
         private List<EnemyView> _enemyViews;
-        static Random rnd = new Random();
+        //static Random rnd = new Random();
 
         public MoveCalculationHelper(Board<HexPieceView> board, HexPieceView player)
         {
             _board = board;
             _player = player;
             _boardCalculationHelper = new BoardCalculationHelper(board);
-            _enemyViews = new List<EnemyView>(6);
         }
 
         public void MoveToFinalPosition()
         {
+            _enemyViews = Object.FindObjectsOfType<EnemyView>().ToList();
+
             foreach (var enemyView in _enemyViews)
             {
                 if (enemyView.FinalPosition != null)
@@ -44,7 +47,7 @@ namespace GameSystem.Views
             bool IsPieceAt(Tile tile) => _board.PieceAt(tile) == null; //local function 
             var list = positionsList.Where(IsPieceAt).ToList();
 
-            int idx = rnd.Next(list.Count);
+            //int idx = rnd.Next(list.Count);
 
             foreach (var enemyView in _enemyViews)
             {
@@ -57,7 +60,8 @@ namespace GameSystem.Views
                     {
                         if (list.Count <= 0) break;
 
-                        var tile2 = list[idx];
+                        //var tile2 = list[idx];
+                        var tile2 = list.Random();
 
                         list.Remove(tile2);
 

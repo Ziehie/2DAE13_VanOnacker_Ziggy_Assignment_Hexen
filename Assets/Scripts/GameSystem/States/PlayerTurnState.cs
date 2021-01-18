@@ -4,6 +4,7 @@ using BoardSystem;
 using GameSystem.Abilities;
 using GameSystem.BoardCalculations;
 using GameSystem.Views;
+using UnityEngine;
 
 namespace GameSystem.States
 {
@@ -18,7 +19,6 @@ namespace GameSystem.States
         private ActiveHand<AbilityBase> _activeHand;
         private int _amountOfAbilitiesUsed;
         private BoardCalculationHelper _boardCalculationHelper;
-
 
         public PlayerTurnState(Board<HexPieceView> board, Pile<AbilityBase> pile, ActiveHand<AbilityBase> activeHand, PlayerView player)
         {
@@ -91,5 +91,7 @@ namespace GameSystem.States
 
             StateMachine.MoveTo(GameStates.Enemy);
         }
+
+
     }
 }
