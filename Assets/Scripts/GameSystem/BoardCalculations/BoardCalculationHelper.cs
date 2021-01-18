@@ -32,7 +32,6 @@ namespace GameSystem.BoardCalculations
 
             _areaFinder = new BreadthFirstAreaSearch(GetNeighbours, GetDistance);
             _pathFinder = new AStarPathFinding(GetNeighbours, GetDistance, GetDistance);
-
         }
 
         public Position Add(Tile tile, Position direction)
@@ -120,7 +119,6 @@ namespace GameSystem.BoardCalculations
                     }
                 }
             }
-
             return tileList;
         }
 
@@ -154,7 +152,6 @@ namespace GameSystem.BoardCalculations
                     }
                 }
             }
-
             return tileList;
         }
 

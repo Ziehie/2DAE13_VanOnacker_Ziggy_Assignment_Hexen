@@ -12,13 +12,13 @@ namespace GameSystem.Views
 
         public AbilityView CreateAbilityView(Transform transform, string ability)
         {
-            int index = _abilityNames.IndexOf(ability);
+            int idx = _abilityNames.IndexOf(ability);
 
-            if (index == -1)
+            if (idx == -1)
             {
                 Debug.Log("No name found for " + ability);
             }
-            var abilityView = Instantiate(_abilityViews.ElementAt(index), transform);
+            var abilityView = Instantiate(_abilityViews.ElementAt(idx), transform);
 
             abilityView.Model = ability;
             abilityView.name = ability;

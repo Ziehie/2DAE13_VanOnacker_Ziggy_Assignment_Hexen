@@ -68,7 +68,6 @@ namespace GameSystem.Utils
                 current = cameFrom[current];
                 path.Insert(0, current); //Insert instead of Append so we dont need to reverse the list at the end
             }
-
             return path;
         }
 

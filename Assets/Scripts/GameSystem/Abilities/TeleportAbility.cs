@@ -11,7 +11,7 @@ namespace Assets.Scripts.GameSystem.Abilities
     {
         private readonly Board<HexPieceView> _board;
         private BoardCalculationHelper _boardCalculationHelper;
-        //public TeleportAbility(Board<HexPieceView> board) => _board = board;
+
         public TeleportAbility(Board<HexPieceView> board)
         {
             _board = board;

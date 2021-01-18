@@ -24,15 +24,15 @@ namespace Assets.Scripts.GameSystem.Abilities
 
             if (!tileList.Contains(holdTile)) return tileList;
 
-            int index1 = tileList.IndexOf(holdTile);
-            int index2 = _boardCalculationHelper.TrueModulo(index1 - 1, tileList.Count - 1);
-            int index3 = _boardCalculationHelper.TrueModulo(index1 + 1, tileList.Count - 1);
+            int idx1 = tileList.IndexOf(holdTile);
+            int idx2 = _boardCalculationHelper.TrueModulo(idx1 - 1, tileList.Count - 1);
+            int idx3 = _boardCalculationHelper.TrueModulo(idx1 + 1, tileList.Count - 1);
 
             return new List<Tile>()
             {
-                tileList[index2],
-                tileList[index1],
-                tileList[index3]
+                tileList[idx2],
+                tileList[idx1],
+                tileList[idx3]
             };
         }
 

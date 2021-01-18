@@ -19,7 +19,7 @@ namespace BoardSystem
             InitiateTiles();
         }
 
-        private void InitiateTiles()
+        private void InitiateTiles() //axial generation
         {
             for (var q = -Radius; q <= Radius; q++)
             {

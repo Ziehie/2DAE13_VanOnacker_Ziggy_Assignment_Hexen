@@ -27,7 +27,7 @@ namespace GameSystem.Views
 
         public Position ToBoardPosition(Transform transform, Vector3 worldPosition) => ToBoardPosition((transform.worldToLocalMatrix * worldPosition));
 
-        public Vector3 ToLocalPosition(Position boardPosition)
+        public Vector3 ToLocalPosition(Position boardPosition) //hex to pixel
         {
             var hex = boardPosition.AsVector3();
 

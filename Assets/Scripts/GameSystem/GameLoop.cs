@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using AbilitySystem;
 using Assets.Scripts.GameSystem.Abilities;
 using GameSystem.Views;
@@ -25,7 +24,6 @@ namespace GameSystem
 
         public Board<HexPieceView> Board = new Board<HexPieceView>(3);
         public Pile<AbilityBase> Pile { get; private set; }
-
         public ActiveHand<AbilityBase> ActiveHand { get; set; }
 
 
