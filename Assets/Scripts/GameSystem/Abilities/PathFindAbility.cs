@@ -1,39 +1,36 @@
 ﻿using System.Collections.Generic;
 using BoardSystem;
-using GameSystem.Abilities;
 using GameSystem.BoardCalculations;
+using GameSystem.Utils;
 using GameSystem.Views;
 
-namespace Assets.Scripts.GameSystem.Abilities
+namespace GameSystem.Abilities
 {
-    [Ability("Teleport")]
-    public class TeleportAbility : AbilityBase
+    [Ability("PathFind")]
+    public class SearchPathAbility : AbilityBase
     {
         private readonly Board<HexPieceView> _board;
+        private AStarPathFinding _pathFinder;
         private BoardCalculationHelper _boardCalculationHelper;
-        //public TeleportAbility(Board<HexPieceView> board) => _board = board;
-        public TeleportAbility(Board<HexPieceView> board)
+
+        public SearchPathAbility(Board<HexPieceView> board)
         {
             _board = board;
             _boardCalculationHelper = new BoardCalculationHelper(_board);
-        } 
+            //_pathFinder = new AStarPathFinding(_boardCalculationHelper.GetNeighbours(new Tile(new Position())), _boardCalculationHelper.Distance, _boardCalculationHelper.Distance);
+        }
+
         public override List<Tile> OnTileHold(Tile playerTile, Tile holdTile)
         {
-            //List<Tile> tileList = new List<Tile>();
-
-            //if (_board.PieceAt(holdTile) == null)
-            //{
-            //    tileList.Add(holdTile);
-            //}
-            //return tileList;
             var validTiles = _boardCalculationHelper.GetNeighbours(playerTile);
-            return validTiles;
+
+            return !validTiles.Contains(holdTile) ? validTiles : _pathFinder.Path(playerTile, holdTile);
         }
 
         public override void OnTileRelease(Tile playerTile, Tile holdTile)
         {
             if (!OnTileHold(playerTile, holdTile).Contains(holdTile)) return;
-           _board.Move(playerTile, holdTile);
+            _board.Move(playerTile, holdTile);
         }
     }
 }

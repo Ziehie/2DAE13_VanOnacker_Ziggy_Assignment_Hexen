@@ -2,6 +2,7 @@
 using System.Linq;
 using BoardSystem;
 using GameSystem.Views;
+using UnityEngine;
 
 namespace GameSystem.BoardCalculations
 {
@@ -143,6 +144,20 @@ namespace GameSystem.BoardCalculations
                 }
             }
             return tileList;
+        }
+
+        public int Distance(Tile fromTile, Tile toTile)
+        {
+            var fromPosition = fromTile.Position;
+            var toPosition = toTile.Position;
+
+            var xDistance = Mathf.Abs(fromPosition.X - toPosition.X);
+            var yDistance = Mathf.Abs(fromPosition.Y - toPosition.Y);
+            var zDistance = Mathf.Abs(fromPosition.Z - toPosition.Z);
+
+            var totalDistance = xDistance + yDistance + zDistance;
+
+            return totalDistance / 2;
         }
     }
 }
