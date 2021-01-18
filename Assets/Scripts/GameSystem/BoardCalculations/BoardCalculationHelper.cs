@@ -105,7 +105,7 @@ namespace GameSystem.BoardCalculations
             {
                 for (int j = 0; j < radius; j++)
                 {
-                    goPosition = GetOffset(goPosition, (OffsetDirection) i);
+                    goPosition = GetOffset(goPosition, (OffsetDirection)i);
                     Tile newTile = _board.TileAt(goPosition);
 
                     if (newTile != null)

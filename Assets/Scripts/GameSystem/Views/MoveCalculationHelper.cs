@@ -37,15 +37,15 @@ namespace GameSystem.Views
 
         public void UpdateFinalPositions()
         {
-            var fromTile = _board.TileOf(_player); 
+            var fromTile = _board.TileOf(_player);
             var tileList = _boardCalculationHelper.GetRadius(fromTile, 1);
             var positionsList = _boardCalculationHelper.GetBFSPositions(fromTile, 2);
-            
-            bool IsPieceAt(Tile tile) => _board.PieceAt(tile) == null;
+
+            bool IsPieceAt(Tile tile) => _board.PieceAt(tile) == null; //local function 
             var list = positionsList.Where(IsPieceAt).ToList();
 
             int idx = rnd.Next(list.Count);
-            
+
             foreach (var enemyView in _enemyViews)
             {
                 if (enemyView != _player)
@@ -66,6 +66,5 @@ namespace GameSystem.Views
                 }
             }
         }
-
     }
 }

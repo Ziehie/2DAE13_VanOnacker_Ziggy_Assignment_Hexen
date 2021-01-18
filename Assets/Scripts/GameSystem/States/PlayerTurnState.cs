@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BoardSystem;
 
-namespace Assets.Scripts.GameSystem.States
+namespace GameSystem.States
 {
-    class PlayerTurnState
+    public class PlayerTurnState : GameStateBase
     {
     }
 }

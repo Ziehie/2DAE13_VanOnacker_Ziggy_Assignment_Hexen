@@ -1,18 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using BoardSystem;
+using GameSystem.Views;
 
-public class EnemyTurnState : MonoBehaviour
+namespace GameSystem.States
 {
-    // Start is called before the first frame update
-    void Start()
+    public class EnemyTurnState : GameStateBase
     {
-        
-    }
+        private Board<HexPieceView> _board;
+        private MoveCalculationHelper _moveCalculationHelper;
+        private EnemyTurnState(Board<HexPieceView> board, PlayerView player)
+        {
+            _moveCalculationHelper = new MoveCalculationHelper(board, player);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override void OnEnter()
+        {
+            _moveCalculationHelper.MoveToFinalPosition();
+            _moveCalculationHelper.UpdateFinalPositions();
+            StateMachine.MoveTo(GameStates.Player);
+        }
     }
 }
