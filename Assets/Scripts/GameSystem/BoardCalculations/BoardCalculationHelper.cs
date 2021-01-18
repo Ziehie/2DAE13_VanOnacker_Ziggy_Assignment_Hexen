@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BoardSystem;
 using GameSystem.Views;
 
@@ -8,6 +9,8 @@ namespace GameSystem.BoardCalculations
     {
         private readonly Dictionary<OffsetDirection, CubeOffset> _offsetValues = new Dictionary<OffsetDirection, CubeOffset>();
         private readonly Board<HexPieceView> _board;
+
+        public List<OffsetDirection> OffsetDirections => _offsetValues.Keys.ToList();
 
         public BoardCalculationHelper(Board<HexPieceView> board)
         {
@@ -114,24 +117,33 @@ namespace GameSystem.BoardCalculations
             return (nr % mod + mod) % mod;
         }
 
-        //public List<Tile> GetCrossLines(Tile center)
-        //{
-        //    List<Tile> tiles = new List<Tile>();
+        public Tile GetNeighbour(Tile startTile, OffsetDirection direction)
+        {
+            _offsetValues.TryGetValue(direction, out var value);
 
-        //    foreach (var offset in _offsetValues)
-        //    {
-        //        tiles.AddRange(GetLines(center, offset.Key));
-        //    }
+            return TileAdd(startTile, value.OffsetPosition);
+        }
 
-        //    return tiles;
-        //}
+        public List<Tile> GetNeighbours(Tile startTile)
+        {
+            var tileList = new List<Tile>();
 
-        //public Tile GetNeighbour(Tile startTile, OffsetDirection direction)
-        //{
-        //    _offsetValues.TryGetValue(direction, out var value);
+            foreach (OffsetDirection direction in OffsetDirections)
+            {
+                var neighbour = GetNeighbour(startTile, direction);
 
-        //    return TileAdd(startTile, value.OffsetPosition);
-        //}
+                if (neighbour != null)
+                {
+                    var neighbourPiece = _board.PieceAt(neighbour);
+
+                    if (neighbourPiece == null)
+                    {
+                        tileList.Add(neighbour);
+                    }
+                }
+            }
+            return tileList;
+        }
     }
 }
 
