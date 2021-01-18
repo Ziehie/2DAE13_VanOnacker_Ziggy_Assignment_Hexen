@@ -19,8 +19,6 @@ namespace GameSystem
 
         private BoardView _boardView;
         private PlayerView _playerView;
-        private List<Tile> _validTiles = new List<Tile>();
-        private AbilityBase _draggedAbility;
 
         public event EventHandler Initialized;
 
@@ -40,6 +38,8 @@ namespace GameSystem
 
             ConnectPlayer();
             ConnectEnemies();
+
+
 
             StartCoroutine(PostStart());
         }
@@ -69,46 +69,11 @@ namespace GameSystem
             Pile.AddAbility("Knockback", 3);
         }
 
+        internal void OnEnterTile(Tile holdTile) => _gameStateMachine.CurrentState.OnEnterTile(holdTile);
+        internal void OnExitTile(Tile holdTile) => _gameStateMachine.CurrentState.OnExitTile(holdTile);
         internal void OnAbilityBeginDrag(string ability) => _gameStateMachine.CurrentState.OnAbilityBeginDrag(ability);
-
-        internal void OnAbilityReleased(string ability, Tile holdTile) => _gameStateMachine.CurrentState.OnAbilityReleased(ability, holdTile);
-
-        internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active) => _gameStateMachine.CurrentState.OnAbilityHoldActivity(holdTile, ability, active);
-
-        //internal void OnAbilityReleased(string ability, Tile holdTile)
-        //{
-        //    if (_draggedAbility == null) return;
-
-        //    Board.UnHighlight(_validTiles);
-
-        //    if (!_validTiles.Contains(holdTile))
-        //    {
-        //        _draggedAbility = null;
-        //    }
-        //    else
-        //    {
-        //        _draggedAbility.OnTileRelease(Board.TileOf(_playerView), holdTile);
-        //        ActiveHand.RemoveAbility(ability);
-        //        ActiveHand.InitializeActiveHand();
-        //    }
-        //    _validTiles.Clear();
-        //}
-
-        //internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
-        //{
-        //    if (_draggedAbility == null) return;
-
-        //    if (active)
-        //    {
-        //       _validTiles = _draggedAbility.OnTileHold(Board.TileOf(_playerView), holdTile);
-        //       Board.Highlight(_validTiles);
-        //    }
-        //    else
-        //    {
-        //        Board.UnHighlight(_validTiles);
-        //        _validTiles.Clear();
-        //    }
-        //}
+        internal void OnAbilityReleased(Tile holdTile) => _gameStateMachine.CurrentState.OnAbilityReleased(holdTile);
+        internal void EndTurn() => _gameStateMachine.CurrentState.EndTurn();
 
         private void ConnectPlayer()
         {

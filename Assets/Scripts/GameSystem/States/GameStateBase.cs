@@ -11,15 +11,13 @@ namespace GameSystem.States
 
         public virtual void OnExit() { }
 
-        public virtual void OnEnterTile() { }
+        public virtual void OnEnterTile(Tile holdTile) { }
 
         public virtual void OnExitTile(Tile holdTile) { }
 
         public virtual void OnAbilityBeginDrag(string ability) { }
 
-        public virtual void OnAbilityHoldActivity(Tile holdTile, string ability, bool active) { }
-
-        public virtual void OnAbilityReleased(string ability, Tile holdTile) { }
+        public virtual void OnAbilityReleased(Tile holdTile) { }
 
         public virtual void EndTurn() { }
     }

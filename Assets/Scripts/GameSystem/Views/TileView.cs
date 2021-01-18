@@ -54,38 +54,11 @@ namespace GameSystem.Views
             transform.localScale = new Vector3(pointySize.x / size.x, 1f, pointySize.y / size.z);
         }
 
-        public void OnPointerEnter(PointerEventData pointerEventData)
-        {
-            var pointerDrag = pointerEventData.pointerDrag;
-            if (pointerDrag == null) return;
+        public void OnPointerEnter(PointerEventData pointerEventData) => GameLoop.Instance.OnEnterTile(_model);
 
-            var component = pointerDrag.GetComponent<AbilityView>();
-            if (component == null) return;
+        public void OnPointerExit(PointerEventData pointerEventData) => GameLoop.Instance.OnExitTile(_model);
 
-           GameLoop.Instance.OnAbilityHoldActivity(_model, component.Model, true);
-        }
-
-        public void OnPointerExit(PointerEventData pointerEventData)
-        {
-            var pointerDrag = pointerEventData.pointerDrag;
-            if (pointerDrag == null) return;
-
-            var component = pointerDrag.GetComponent<AbilityView>();
-            if (component == null) return;
-
-            GameLoop.Instance.OnAbilityHoldActivity(_model, component.Model, false);
-        }
-
-        public void OnDrop(PointerEventData pointerEventData)
-        {
-            var pointerDrag = pointerEventData.pointerDrag;
-            if (pointerDrag == null) return;
-
-            var component = pointerDrag.GetComponent<AbilityView>();
-            if (component == null) return;
-
-            GameLoop.Instance.OnAbilityReleased(component.Model, _model);
-        }
+        public void OnDrop(PointerEventData pointerEventData) => GameLoop.Instance.OnAbilityReleased(_model);
 
         public Vector2 GetPointyDimension(float radius) => new Vector2(Mathf.Sqrt(3f) * radius, 2f * radius);
     }

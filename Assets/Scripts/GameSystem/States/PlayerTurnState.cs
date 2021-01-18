@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AbilitySystem;
 using BoardSystem;
 using GameSystem.Abilities;
@@ -13,6 +12,7 @@ namespace GameSystem.States
         private PlayerView _player;
         private List<Tile> _validTiles = new List<Tile>();
         private AbilityBase _draggedAbility;
+        private string _ability;
         private Board<HexPieceView> _board;
         private Pile<AbilityBase> _pile;
         private ActiveHand<AbilityBase> _activeHand;
@@ -20,8 +20,7 @@ namespace GameSystem.States
         private BoardCalculationHelper _boardCalculationHelper;
 
 
-        public PlayerTurnState(Board<HexPieceView> board, Pile<AbilityBase> pile, ActiveHand<AbilityBase> activeHand,
-            PlayerView player)
+        public PlayerTurnState(Board<HexPieceView> board, Pile<AbilityBase> pile, ActiveHand<AbilityBase> activeHand, PlayerView player)
         {
             _board = board;
             _pile = pile;
@@ -36,12 +35,39 @@ namespace GameSystem.States
             _amountOfAbilitiesUsed = 0;
         }
 
+        public override void OnEnterTile(Tile holdTile)
+        {
+            if (_draggedAbility != null)
+            {
+                _validTiles = _draggedAbility.OnTileHold(_board.TileOf(_player), holdTile);
+
+                _board.Highlight(_validTiles);
+            }
+            else
+            {
+                var hexPieceView = _board.PieceAt(holdTile);
+
+                if (hexPieceView == null || hexPieceView.FinalPosition == null) return;
+
+                _validTiles = _boardCalculationHelper.GetPositions(holdTile, hexPieceView.FinalPosition);
+
+                _board.Highlight(_validTiles);
+            }
+        }
+
+        public override void OnExitTile(Tile holdTile)
+        {
+            _board.UnHighlight(_validTiles);
+            _validTiles.Clear();
+        }
+
         public override void OnAbilityBeginDrag(string ability)
         {
+            _ability = ability;
             _draggedAbility = _pile.GetAbilityAction(ability);
         }
 
-        public override void OnAbilityReleased(string ability, Tile holdTile)
+        public override void OnAbilityReleased(Tile holdTile)
         {
             if (_draggedAbility == null) return;
 
@@ -54,26 +80,16 @@ namespace GameSystem.States
             else
             {
                 _draggedAbility.OnTileRelease(_board.TileOf(_player), holdTile);
-                _activeHand.RemoveAbility(ability);
+                _activeHand.RemoveAbility(_ability);
                 _activeHand.InitializeActiveHand();
+                _draggedAbility = null;
+                _ability = null;
+                ++_amountOfAbilitiesUsed;
             }
             _validTiles.Clear();
-        }
+            if (_amountOfAbilitiesUsed <= 1) return;
 
-        public override void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
-        {
-            if (_draggedAbility == null) return;
-
-            if (active)
-            {
-                _validTiles = _draggedAbility.OnTileHold(_board.TileOf(_player), holdTile);
-                _board.Highlight(_validTiles);
-            }
-            else
-            {
-                _board.UnHighlight(_validTiles);
-                _validTiles.Clear();
-            }
+            StateMachine.MoveTo(GameStates.Enemy);
         }
     }
 }
