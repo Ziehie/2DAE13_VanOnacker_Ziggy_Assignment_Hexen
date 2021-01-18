@@ -10,16 +10,17 @@ namespace GameSystem.States
 {
     public class PlayerTurnState : GameStateBase
     {
-        private PlayerView _player;
+        private readonly PlayerView _player;
+        private readonly Board<HexPieceView> _board;
+        private readonly Pile<AbilityBase> _pile;
+        private readonly ActiveHand<AbilityBase> _activeHand;
+        private readonly BoardCalculationHelper _boardCalculationHelper;
+
         private List<Tile> _validTiles = new List<Tile>();
         private AbilityBase _draggedAbility;
         private string _ability;
-        private Board<HexPieceView> _board;
-        private Pile<AbilityBase> _pile;
-        private ActiveHand<AbilityBase> _activeHand;
         private int _amountOfAbilitiesUsed;
-        private BoardCalculationHelper _boardCalculationHelper;
-
+        
         public PlayerTurnState(Board<HexPieceView> board, Pile<AbilityBase> pile, ActiveHand<AbilityBase> activeHand, PlayerView player)
         {
             _board = board;
@@ -91,7 +92,5 @@ namespace GameSystem.States
 
             StateMachine.MoveTo(GameStates.Enemy);
         }
-
-
     }
 }

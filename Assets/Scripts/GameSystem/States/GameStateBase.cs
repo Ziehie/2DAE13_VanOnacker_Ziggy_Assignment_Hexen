@@ -18,7 +18,5 @@ namespace GameSystem.States
         public virtual void OnAbilityBeginDrag(string ability) { }
 
         public virtual void OnAbilityReleased(Tile holdTile) { }
-
-        public virtual void EndTurn() { }
     }
 }

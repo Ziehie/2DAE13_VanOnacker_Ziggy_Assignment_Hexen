@@ -39,15 +39,7 @@ namespace GameSystem
 
             ConnectPlayer();
             ConnectEnemies();
-
-            _gameStateMachine = new StateMachine<GameStateBase>();
-
-            var playerTurnState = new PlayerTurnState(Board, Pile, ActiveHand, _playerView);
-            _gameStateMachine.RegisterState(GameStates.Player, playerTurnState);
-
-            var enemyTurnState = new EnemyTurnState(Board, _playerView);
-            _gameStateMachine.RegisterState(GameStates.Enemy, enemyTurnState);
-            _gameStateMachine.SetStartState(GameStates.Enemy);
+            ConnectGameStates();
 
             StartCoroutine(PostStart());
         }
@@ -81,7 +73,6 @@ namespace GameSystem
         internal void OnExitTile(Tile holdTile) => _gameStateMachine.CurrentState.OnExitTile(holdTile);
         internal void OnAbilityBeginDrag(string ability) => _gameStateMachine.CurrentState.OnAbilityBeginDrag(ability);
         internal void OnAbilityReleased(Tile holdTile) => _gameStateMachine.CurrentState.OnAbilityReleased(holdTile);
-        internal void EndTurn() => _gameStateMachine.CurrentState.EndTurn();
 
         private void ConnectPlayer()
         {
@@ -95,6 +86,18 @@ namespace GameSystem
             {
                 Board.Place(Board.TileAt(_positionHelper.ToBoardPosition(_boardView.transform, enemyView.transform.position)), enemyView);
             }
+        }
+
+        private void ConnectGameStates()
+        {
+            _gameStateMachine = new StateMachine<GameStateBase>();
+
+            var playerTurnState = new PlayerTurnState(Board, Pile, ActiveHand, _playerView);
+            _gameStateMachine.RegisterState(GameStates.Player, playerTurnState);
+
+            var enemyTurnState = new EnemyTurnState(Board, _playerView);
+            _gameStateMachine.RegisterState(GameStates.Enemy, enemyTurnState);
+            _gameStateMachine.SetStartState(GameStates.Enemy);
         }
     }
 }

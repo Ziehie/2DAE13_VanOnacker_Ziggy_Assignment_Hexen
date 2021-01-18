@@ -4,7 +4,7 @@ namespace StateSystem
 {
     public class StateMachine<TState> where TState : IState<TState>
     {
-        private Dictionary<string, TState> _states = new Dictionary<string, TState>();
+        private readonly Dictionary<string, TState> _states = new Dictionary<string, TState>();
         public TState CurrentState { get; internal set; }
 
         public void RegisterState(string name, TState state)

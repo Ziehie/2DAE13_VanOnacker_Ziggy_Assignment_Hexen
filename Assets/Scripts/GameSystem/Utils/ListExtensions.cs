@@ -6,9 +6,9 @@ namespace GameSystem.Utils
     {
         public static T Random<T>(this List<T> list)
         {
-            int index = new System.Random().Next(list.Count);
+            int idx = new System.Random().Next(list.Count);
 
-            return list[index];
+            return list[idx];
         }
     }
 }
