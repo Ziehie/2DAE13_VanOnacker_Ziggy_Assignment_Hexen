@@ -19,14 +19,15 @@ namespace GameSystem
 
         private BoardView _boardView;
         private PlayerView _playerView;
+        private StateMachine<GameStateBase> _gameStateMachine;
 
         public event EventHandler Initialized;
 
         public Board<HexPieceView> Board = new Board<HexPieceView>(3);
         public Pile<AbilityBase> Pile { get; private set; }
+
         public ActiveHand<AbilityBase> ActiveHand { get; set; }
 
-        private StateMachine<GameStateBase> _gameStateMachine;
 
         private void Start()
         {
@@ -39,7 +40,14 @@ namespace GameSystem
             ConnectPlayer();
             ConnectEnemies();
 
+            _gameStateMachine = new StateMachine<GameStateBase>();
 
+            var playerTurnState = new PlayerTurnState(Board, Pile, ActiveHand, _playerView);
+            _gameStateMachine.RegisterState(GameStates.Player, playerTurnState);
+
+            var enemyTurnState = new EnemyTurnState(Board, _playerView);
+            _gameStateMachine.RegisterState(GameStates.Enemy, enemyTurnState);
+            _gameStateMachine.SetStartState(GameStates.Enemy);
 
             StartCoroutine(PostStart());
         }

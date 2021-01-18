@@ -23,5 +23,11 @@ namespace StateSystem
 
             CurrentState?.OnEnter();
         }
+
+        public void SetStartState(string name)
+        {
+            CurrentState = _states[name];
+            CurrentState.OnEnter();
+        }
     }
 }
