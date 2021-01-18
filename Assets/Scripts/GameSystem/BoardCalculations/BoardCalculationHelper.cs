@@ -124,7 +124,7 @@ namespace GameSystem.BoardCalculations
             return tileList;
         }
 
-        public int TrueModulo(int nr, int mod)
+        public int TrueModulo(int nr, int mod) //modulo for negative LHS 
         {
             return (nr % mod + mod) % mod;
         }
