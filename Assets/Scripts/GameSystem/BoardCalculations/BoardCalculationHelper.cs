@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BoardSystem;
+using GameSystem.Utils;
 using GameSystem.Views;
 using UnityEngine;
 
@@ -8,8 +9,11 @@ namespace GameSystem.BoardCalculations
 {
     public class BoardCalculationHelper
     {
-        private readonly Dictionary<OffsetDirection, CubeOffset> _offsetValues = new Dictionary<OffsetDirection, CubeOffset>();
+        private readonly Dictionary<OffsetDirection, CubeOffset> _offsetValues =
+            new Dictionary<OffsetDirection, CubeOffset>();
+
         private readonly Board<HexPieceView> _board;
+        private readonly BreadthFirstAreaSearch _areaFinder;
 
         public List<OffsetDirection> OffsetDirections => _offsetValues.Keys.ToList();
 
@@ -101,7 +105,7 @@ namespace GameSystem.BoardCalculations
             {
                 for (int j = 0; j < radius; j++)
                 {
-                    goPosition = GetOffset(goPosition, (OffsetDirection)i);
+                    goPosition = GetOffset(goPosition, (OffsetDirection) i);
                     Tile newTile = _board.TileAt(goPosition);
 
                     if (newTile != null)
@@ -110,6 +114,7 @@ namespace GameSystem.BoardCalculations
                     }
                 }
             }
+
             return tileList;
         }
 
@@ -143,6 +148,7 @@ namespace GameSystem.BoardCalculations
                     }
                 }
             }
+
             return tileList;
         }
 
@@ -159,6 +165,7 @@ namespace GameSystem.BoardCalculations
 
             return totalDistance / 2;
         }
+
+        public List<Tile> GetBFSPositions(Tile fromTile, int maxSteps) => _areaFinder.Area(fromTile, maxSteps);
     }
 }
-
