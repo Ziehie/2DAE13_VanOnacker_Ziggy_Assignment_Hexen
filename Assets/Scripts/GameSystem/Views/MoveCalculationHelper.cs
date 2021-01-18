@@ -39,7 +39,7 @@ namespace GameSystem.Views
         {
             var fromTile = _board.TileOf(_player);
             var tileList = _boardCalculationHelper.GetRadius(fromTile, 1);
-            var positionsList = _boardCalculationHelper.GetBFSPositions(fromTile, 2);
+            var positionsList = _boardCalculationHelper.GetPositions(fromTile, 2);
 
             bool IsPieceAt(Tile tile) => _board.PieceAt(tile) == null; //local function 
             var list = positionsList.Where(IsPieceAt).ToList();

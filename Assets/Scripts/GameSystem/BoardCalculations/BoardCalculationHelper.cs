@@ -14,6 +14,8 @@ namespace GameSystem.BoardCalculations
 
         private readonly Board<HexPieceView> _board;
         private readonly BreadthFirstAreaSearch _areaFinder;
+        private readonly AStarPathFinding _pathFinder;
+        
 
         public List<OffsetDirection> OffsetDirections => _offsetValues.Keys.ToList();
 
@@ -27,6 +29,10 @@ namespace GameSystem.BoardCalculations
             _offsetValues.Add(OffsetDirection.Right, new CubeOffset(1, -1, 0));
             _offsetValues.Add(OffsetDirection.UpRight, new CubeOffset(1, 0, -1));
             _offsetValues.Add(OffsetDirection.DownRight, new CubeOffset(0, -1, 1));
+
+            _areaFinder = new BreadthFirstAreaSearch(GetNeighbours, Distance);
+            _pathFinder = new AStarPathFinding(GetNeighbours, Distance, Distance);
+
         }
 
         public Position Add(Tile tile, Position direction)
@@ -130,7 +136,7 @@ namespace GameSystem.BoardCalculations
             return TileAdd(startTile, value.OffsetPosition);
         }
 
-        public List<Tile> GetNeighbours(Tile startTile)
+        public List<Tile> GetNeighbours(Tile startTile, bool pieceCheck = false)
         {
             var tileList = new List<Tile>();
 
@@ -142,7 +148,7 @@ namespace GameSystem.BoardCalculations
                 {
                     var neighbourPiece = _board.PieceAt(neighbour);
 
-                    if (neighbourPiece == null)
+                    if (!pieceCheck || pieceCheck && neighbourPiece == null)
                     {
                         tileList.Add(neighbour);
                     }
@@ -152,7 +158,7 @@ namespace GameSystem.BoardCalculations
             return tileList;
         }
 
-        public int Distance(Tile fromTile, Tile toTile)
+        public int GetDistance(Tile fromTile, Tile toTile)
         {
             var fromPosition = fromTile.Position;
             var toPosition = toTile.Position;
@@ -166,6 +172,21 @@ namespace GameSystem.BoardCalculations
             return totalDistance / 2;
         }
 
-        public List<Tile> GetBFSPositions(Tile fromTile, int maxSteps) => _areaFinder.Area(fromTile, maxSteps);
+        public static float Heuristic(Tile fromtile, Tile toTile)
+        {
+            Position position1 = fromtile.Position;
+            Position position2 = toTile.Position;
+            return HexUtils.StraightLineDistance((position1.X, position1.Y, position1.Z), (position2.X, position2.Y, position2.Z));
+        }
+
+        public static float Distance(Tile fromTile, Tile toTile)
+        {
+            Position position1 = fromTile.Position;
+            Position position2 = toTile.Position;
+            return HexUtils.ManhattanDistance((position1.X, position1.Y, position1.Z), (position2.X, position2.Y, position2.Z));
+        }
+
+        public List<Tile> GetPositions(Tile fromTile, int maxSteps) => _areaFinder.Area(fromTile, maxSteps);
+        public List<Tile> GetPositions(Tile fromTile, Tile toTile) => _pathFinder.Path(fromTile, toTile);
     }
 }

@@ -1,8 +1,79 @@
-﻿using BoardSystem;
+﻿using System;
+using System.Collections.Generic;
+using AbilitySystem;
+using BoardSystem;
+using GameSystem.Abilities;
+using GameSystem.BoardCalculations;
+using GameSystem.Views;
 
 namespace GameSystem.States
 {
     public class PlayerTurnState : GameStateBase
     {
+        private PlayerView _player;
+        private List<Tile> _validTiles = new List<Tile>();
+        private AbilityBase _draggedAbility;
+        private Board<HexPieceView> _board;
+        private Pile<AbilityBase> _pile;
+        private ActiveHand<AbilityBase> _activeHand;
+        private int _amountOfAbilitiesUsed;
+        private BoardCalculationHelper _boardCalculationHelper;
+
+
+        public PlayerTurnState(Board<HexPieceView> board, Pile<AbilityBase> pile, ActiveHand<AbilityBase> activeHand,
+            PlayerView player)
+        {
+            _board = board;
+            _pile = pile;
+            _activeHand = activeHand;
+            _player = player;
+            _boardCalculationHelper = new BoardCalculationHelper(board);
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            _amountOfAbilitiesUsed = 0;
+        }
+
+        public override void OnAbilityBeginDrag(string ability)
+        {
+            _draggedAbility = _pile.GetAbilityAction(ability);
+        }
+
+        public override void OnAbilityReleased(string ability, Tile holdTile)
+        {
+            if (_draggedAbility == null) return;
+
+            _board.UnHighlight(_validTiles);
+
+            if (!_validTiles.Contains(holdTile))
+            {
+                _draggedAbility = null;
+            }
+            else
+            {
+                _draggedAbility.OnTileRelease(_board.TileOf(_player), holdTile);
+                _activeHand.RemoveAbility(ability);
+                _activeHand.InitializeActiveHand();
+            }
+            _validTiles.Clear();
+        }
+
+        public override void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
+        {
+            if (_draggedAbility == null) return;
+
+            if (active)
+            {
+                _validTiles = _draggedAbility.OnTileHold(_board.TileOf(_player), holdTile);
+                _board.Highlight(_validTiles);
+            }
+            else
+            {
+                _board.UnHighlight(_validTiles);
+                _validTiles.Clear();
+            }
+        }
     }
 }

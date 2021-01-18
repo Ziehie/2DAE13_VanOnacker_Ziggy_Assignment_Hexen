@@ -13,7 +13,7 @@ namespace GameSystem.States
 
         public virtual void OnEnterTile() { }
 
-        public virtual void OnExitTile() { }
+        public virtual void OnExitTile(Tile holdTile) { }
 
         public virtual void OnAbilityBeginDrag(string ability) { }
 

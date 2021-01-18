@@ -7,6 +7,8 @@ using GameSystem.Views;
 using UnityEngine;
 using BoardSystem;
 using GameSystem.Abilities;
+using GameSystem.States;
+using StateSystem;
 using Utils;
 
 namespace GameSystem
@@ -25,6 +27,8 @@ namespace GameSystem
         public Board<HexPieceView> Board = new Board<HexPieceView>(3);
         public Pile<AbilityBase> Pile { get; private set; }
         public ActiveHand<AbilityBase> ActiveHand { get; set; }
+
+        private StateMachine<GameStateBase> _gameStateMachine;
 
         private void Start()
         {
@@ -65,45 +69,46 @@ namespace GameSystem
             Pile.AddAbility("Knockback", 3);
         }
 
-        internal void OnAbilityBeginDrag(string ability)
-        {
-            _draggedAbility = Pile.GetAbilityAction(ability);
-        }
+        internal void OnAbilityBeginDrag(string ability) => _gameStateMachine.CurrentState.OnAbilityBeginDrag(ability);
 
-        internal void OnAbilityReleased(string ability, Tile holdTile)
-        {
-            if (_draggedAbility == null) return;
+        internal void OnAbilityReleased(string ability, Tile holdTile) => _gameStateMachine.CurrentState.OnAbilityReleased(ability, holdTile);
 
-            Board.UnHighlight(_validTiles);
+        internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active) => _gameStateMachine.CurrentState.OnAbilityHoldActivity(holdTile, ability, active);
 
-            if (!_validTiles.Contains(holdTile))
-            {
-                _draggedAbility = null;
-            }
-            else
-            {
-                _draggedAbility.OnTileRelease(Board.TileOf(_playerView), holdTile);
-                ActiveHand.RemoveAbility(ability);
-                ActiveHand.InitializeActiveHand();
-            }
-            _validTiles.Clear();
-        }
+        //internal void OnAbilityReleased(string ability, Tile holdTile)
+        //{
+        //    if (_draggedAbility == null) return;
 
-        internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
-        {
-            if (_draggedAbility == null) return;
+        //    Board.UnHighlight(_validTiles);
 
-            if (active)
-            {
-               _validTiles = _draggedAbility.OnTileHold(Board.TileOf(_playerView), holdTile);
-               Board.Highlight(_validTiles);
-            }
-            else
-            {
-                Board.UnHighlight(_validTiles);
-                _validTiles.Clear();
-            }
-        }
+        //    if (!_validTiles.Contains(holdTile))
+        //    {
+        //        _draggedAbility = null;
+        //    }
+        //    else
+        //    {
+        //        _draggedAbility.OnTileRelease(Board.TileOf(_playerView), holdTile);
+        //        ActiveHand.RemoveAbility(ability);
+        //        ActiveHand.InitializeActiveHand();
+        //    }
+        //    _validTiles.Clear();
+        //}
+
+        //internal void OnAbilityHoldActivity(Tile holdTile, string ability, bool active)
+        //{
+        //    if (_draggedAbility == null) return;
+
+        //    if (active)
+        //    {
+        //       _validTiles = _draggedAbility.OnTileHold(Board.TileOf(_playerView), holdTile);
+        //       Board.Highlight(_validTiles);
+        //    }
+        //    else
+        //    {
+        //        Board.UnHighlight(_validTiles);
+        //        _validTiles.Clear();
+        //    }
+        //}
 
         private void ConnectPlayer()
         {
